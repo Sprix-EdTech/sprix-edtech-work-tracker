@@ -422,6 +422,67 @@ const TRANSLATIONS = {
         en: 'Please enter a URL',
         ar: 'يرجى إدخال عنوان URL',
     },
+
+    // ---- Settings: Work Mode ----
+    'settings.workMode': {
+        ja: '勤務モード',
+        en: 'Working Mode',
+        ar: 'وضع العمل',
+    },
+    'mode.normal': {
+        ja: '通常モード (休憩込 9H)',
+        en: 'Normal Mode (9H inc. break)',
+        ar: 'الوضع العادي (9 ساعات مع استراحة)',
+    },
+    'mode.ramadan': {
+        ja: 'ラマダンモード (短縮 6H)',
+        en: 'Ramadan Mode (6H short)',
+        ar: 'وضع رمضان (6 ساعات قصيرة)',
+    },
+
+    // ---- Shifts ----
+    'shift.normal1': {
+        ja: '9:00 - 18:00',
+        en: '9:00 - 18:00',
+        ar: '9:00 - 18:00',
+    },
+    'shift.normal2': {
+        ja: '10:00 - 19:00',
+        en: '10:00 - 19:00',
+        ar: '10:00 - 19:00',
+    },
+    'shift.ramadan1': {
+        ja: '9:00 - 15:00',
+        en: '9:00 - 15:00',
+        ar: '9:00 - 15:00',
+    },
+    'shift.ramadan2': {
+        ja: '10:00 - 16:00',
+        en: '10:00 - 16:00',
+        ar: '10:00 - 16:00',
+    },
+
+    // ---- Auth ----
+    'auth.title': {
+        ja: 'パスワードを入力',
+        en: 'Enter Password',
+        ar: 'أدخل كلمة المرور',
+    },
+    'auth.placeholder': {
+        ja: 'パスワード',
+        en: 'Password',
+        ar: 'كلمة المرور',
+    },
+    'auth.btn': {
+        ja: 'ロック解除',
+        en: 'Unlock',
+        ar: 'فتح القفل',
+    },
+    'auth.error': {
+        ja: 'パスワードが間違っています',
+        en: 'Incorrect password',
+        ar: 'كلمة المرور غير صحيحة',
+    },
 };
 
 // ---- i18n Engine ----

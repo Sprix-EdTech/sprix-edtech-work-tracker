@@ -21,6 +21,7 @@ let state = {
   calendarMonth: new Date().getMonth(),
   calendarYear: new Date().getFullYear(),
   editingEmployee: null,
+  workMode: 'normal',
 };
 
 // ---- Google Sheets API config (Phase 2) ----
@@ -38,9 +39,15 @@ document.addEventListener('DOMContentLoaded', () => {
   initExport();
   initMobileMenu();
   initSettings();
+  initSecurity();
 
   // Apply saved language
   setLanguage(currentLang);
+
+  // Update modes
+  const modeSelect = document.getElementById('workModeSelect');
+  if (modeSelect) modeSelect.value = state.workMode;
+  changeWorkMode(); // ensure shift options reflect current mode
 });
 
 // ---- State Management ----
@@ -51,6 +58,19 @@ function loadState() {
       const parsed = JSON.parse(saved);
       state.employees = parsed.employees || [];
       state.attendance = parsed.attendance || {};
+      state.workMode = parsed.workMode || 'normal';
+
+      // Migrate old data
+      state.employees.forEach(emp => {
+        if (emp.defaultShift === '9-15') emp.defaultShift = 'opt1';
+        if (emp.defaultShift === '10-16') emp.defaultShift = 'opt2';
+      });
+      Object.keys(state.attendance).forEach(date => {
+        Object.keys(state.attendance[date]).forEach(empId => {
+          if (state.attendance[date][empId].shift === '9-15') state.attendance[date][empId].shift = 'opt1';
+          if (state.attendance[date][empId].shift === '10-16') state.attendance[date][empId].shift = 'opt2';
+        });
+      });
     }
   } catch (e) {
     console.error('Failed to load state:', e);
@@ -62,6 +82,7 @@ function saveState() {
     localStorage.setItem('sprix-ramadan-tracker', JSON.stringify({
       employees: state.employees,
       attendance: state.attendance,
+      workMode: state.workMode,
     }));
   } catch (e) {
     console.error('Failed to save state:', e);
@@ -198,7 +219,7 @@ function getDefaultStatus(emp) {
 }
 
 function getDefaultShift(emp) {
-  return emp.defaultShift || '9-15';
+  return emp.defaultShift || 'opt1';
 }
 
 function renderDashboard() {
@@ -219,6 +240,10 @@ function renderDashboard() {
     const shift = record ? record.shift : getDefaultShift(emp);
     const initials = getInitials(emp.name);
 
+    const shiftText = shift === 'opt1'
+      ? t(state.workMode === 'normal' ? 'shift.normal1' : 'shift.ramadan1')
+      : t(state.workMode === 'normal' ? 'shift.normal2' : 'shift.ramadan2');
+
     return `
       <div class="employee-card ${status}" data-emp-id="${emp.id}">
         <div class="employee-card-header">
@@ -237,7 +262,7 @@ function renderDashboard() {
         <div class="employee-details">
           <div class="detail-tag">
             <span class="tag-icon">🕐</span>
-            <span>${shift === '9-15' ? '9:00–15:00' : '10:00–16:00'}</span>
+            <span>${shiftText}</span>
           </div>
           ${emp.remoteDay !== undefined && emp.remoteDay !== ''
         ? `<div class="detail-tag"><span class="tag-icon">🏠</span><span>${getDayNameShort(parseInt(emp.remoteDay))}</span></div>`
@@ -254,10 +279,10 @@ function renderDashboard() {
         </div>
 
         <div class="shift-selector">
-          <button class="shift-btn ${shift === '9-15' ? 'active' : ''}"
-                  onclick="setShift('${emp.id}', '9-15')">9:00 – 15:00</button>
-          <button class="shift-btn ${shift === '10-16' ? 'active' : ''}"
-                  onclick="setShift('${emp.id}', '10-16')">10:00 – 16:00</button>
+          <button class="shift-btn ${shift === 'opt1' ? 'active' : ''}"
+                  onclick="setShift('${emp.id}', 'opt1')">${t(state.workMode === 'normal' ? 'shift.normal1' : 'shift.ramadan1')}</button>
+          <button class="shift-btn ${shift === 'opt2' ? 'active' : ''}"
+                  onclick="setShift('${emp.id}', 'opt2')">${t(state.workMode === 'normal' ? 'shift.normal2' : 'shift.ramadan2')}</button>
         </div>
       </div>
     `;
@@ -344,13 +369,13 @@ function openModal(employee = null) {
     title.textContent = t('modal.editTitle');
     nameInput.value = employee.name;
     deptInput.value = employee.department || '';
-    shiftSelect.value = employee.defaultShift || '9-15';
+    shiftSelect.value = employee.defaultShift || 'opt1';
     remoteDaySelect.value = employee.remoteDay !== undefined ? employee.remoteDay : '';
   } else {
     title.textContent = t('modal.addTitle');
     nameInput.value = '';
     deptInput.value = '';
-    shiftSelect.value = '9-15';
+    shiftSelect.value = 'opt1';
     remoteDaySelect.value = '';
   }
 
@@ -419,25 +444,31 @@ function renderEmployeeTable() {
     return;
   }
 
-  tbody.innerHTML = state.employees.map(emp => `
-    <tr>
-      <td>
-        <div class="table-avatar">
-          <div class="employee-avatar" style="width: 32px; height: 32px; font-size: 11px;">${getInitials(emp.name)}</div>
-          <span style="font-weight: 500;">${escapeHTML(emp.name)}</span>
-        </div>
-      </td>
-      <td>${escapeHTML(emp.department || '—')}</td>
-      <td>${emp.defaultShift === '9-15' ? '9:00–15:00' : '10:00–16:00'}</td>
-      <td>${emp.remoteDay !== undefined && emp.remoteDay !== '' ? getDayName(parseInt(emp.remoteDay)) : '—'}</td>
-      <td>
-        <div class="table-actions">
-          <button onclick="editEmployee('${emp.id}')">✏️ ${currentLang === 'ar' ? 'تعديل' : 'Edit'}</button>
-          <button class="delete" onclick="deleteEmployee('${emp.id}')">🗑️ ${currentLang === 'ar' ? 'حذف' : 'Delete'}</button>
-        </div>
-      </td>
-    </tr>
-  `).join('');
+  tbody.innerHTML = state.employees.map(emp => {
+    const shiftText = emp.defaultShift === 'opt1'
+      ? t(state.workMode === 'normal' ? 'shift.normal1' : 'shift.ramadan1')
+      : t(state.workMode === 'normal' ? 'shift.normal2' : 'shift.ramadan2');
+
+    return `
+      <tr>
+        <td>
+          <div class="table-avatar">
+            <div class="employee-avatar" style="width: 32px; height: 32px; font-size: 11px;">${getInitials(emp.name)}</div>
+            <span style="font-weight: 500;">${escapeHTML(emp.name)}</span>
+          </div>
+        </td>
+        <td>${escapeHTML(emp.department || '—')}</td>
+        <td>${shiftText}</td>
+        <td>${emp.remoteDay !== undefined && emp.remoteDay !== '' ? getDayName(parseInt(emp.remoteDay)) : '—'}</td>
+        <td>
+          <div class="table-actions">
+            <button onclick="editEmployee('${emp.id}')">✏️ ${currentLang === 'ar' ? 'تعديل' : 'Edit'}</button>
+            <button class="delete" onclick="deleteEmployee('${emp.id}')">🗑️ ${currentLang === 'ar' ? 'حذف' : 'Delete'}</button>
+          </div>
+        </td>
+      </tr>
+    `
+  }).join('');
 }
 
 function editEmployee(empId) {
@@ -870,4 +901,67 @@ function showToast(message, type = 'success') {
     toast.classList.remove('show');
     setTimeout(() => toast.remove(), 400);
   }, 3000);
+}
+
+// ---- Work Mode & Security ----
+function changeWorkMode() {
+  const modeSelect = document.getElementById('workModeSelect');
+  if (!modeSelect) return;
+
+  state.workMode = modeSelect.value;
+  saveState();
+
+  // Update options in Add Employee Modal
+  const shiftSelect = document.getElementById('empShift');
+  if (shiftSelect) {
+    if (state.workMode === 'normal') {
+      shiftSelect.innerHTML = `
+        <option value="opt1" data-i18n="shift.normal1">${t('shift.normal1')}</option>
+        <option value="opt2" data-i18n="shift.normal2">${t('shift.normal2')}</option>
+      `;
+    } else {
+      shiftSelect.innerHTML = `
+        <option value="opt1" data-i18n="shift.ramadan1">${t('shift.ramadan1')}</option>
+        <option value="opt2" data-i18n="shift.ramadan2">${t('shift.ramadan2')}</option>
+      `;
+    }
+  }
+
+  // Re-render views if they are open
+  if (state.currentView === 'dashboard') renderDashboard();
+  if (state.currentView === 'employees') renderEmployeeTable();
+}
+
+function initSecurity() {
+  const isAuthValid = sessionStorage.getItem('sprix-auth') === 'true';
+  const overlay = document.getElementById('authOverlay');
+  const passInput = document.getElementById('authPassword');
+  const authBtn = document.getElementById('btnAuth');
+  const err = document.getElementById('authError');
+
+  if (isAuthValid) {
+    if (overlay) overlay.classList.add('hidden');
+    return;
+  }
+
+  if (authBtn && passInput) {
+    authBtn.addEventListener('click', () => {
+      // Simple pass requirement for Sprix EdTech
+      if (passInput.value === 'sprix2026') {
+        sessionStorage.setItem('sprix-auth', 'true');
+        overlay.classList.add('hidden');
+      } else {
+        err.classList.add('show');
+      }
+    });
+
+    passInput.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') authBtn.click();
+    });
+  }
+}
+
+// Ensure auth overlay shows instantly if not authenticated
+if (sessionStorage.getItem('sprix-auth') !== 'true') {
+  document.getElementById('authOverlay')?.classList.remove('hidden');
 }

@@ -1252,6 +1252,62 @@ body {
 }
 
 /* ==========================================
+   Auth Overlay
+   ========================================== */
+.auth-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+[dir="rtl"] .auth-overlay {
+  direction: rtl;
+}
+
+.auth-overlay.hidden {
+  display: none;
+}
+
+.auth-card {
+  background: white;
+  padding: 40px;
+  border-radius: 16px;
+  box-shadow: 0 10px 40px rgba(4, 53, 134, 0.1);
+  width: 90%;
+  max-width: 400px;
+  text-align: center;
+}
+
+.auth-card .sidebar-logo {
+  justify-content: center;
+  margin-bottom: 24px;
+}
+
+.auth-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--gray-800);
+  margin-bottom: 24px;
+}
+
+.auth-error {
+  color: #ef4444;
+  font-size: 13px;
+  margin-top: 8px;
+  display: none;
+}
+
+.auth-error.show {
+  display: block;
+}
+
+/* ==========================================
    RTL Support (Arabic)
    ========================================== */
 [dir="rtl"] {
