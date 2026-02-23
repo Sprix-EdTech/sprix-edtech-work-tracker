@@ -1289,6 +1289,10 @@ body {
   margin-bottom: 24px;
 }
 
+.auth-card .sidebar-logo .logo-text {
+  color: var(--primary-color);
+}
+
 .auth-title {
   font-size: 18px;
   font-weight: 600;
