@@ -139,10 +139,11 @@
             <button class="lang-btn" data-lang="ja" onclick="setLanguage('ja')">日本語</button>
             <button class="lang-btn" data-lang="ar" onclick="setLanguage('ar')">عربي</button>
           </div>
-          <div class="connection-status" id="connectionStatus" onclick="switchView('settings')" style="cursor: pointer;"
-            title="Click to configure">
-            <span class="status-dot"></span>
-            <span data-i18n="header.localMode">Local Mode</span>
+          <!-- Connection Status hidden as per user request -->
+          <div class="connection-status hidden" id="connectionStatus" onclick="switchView('settings')"
+            style="display: none;">
+            <span class="status-indicator local" id="statusDot"></span>
+            <span class="status-text" id="statusText">Local Mode</span>
           </div>
         </div>
       </header>
