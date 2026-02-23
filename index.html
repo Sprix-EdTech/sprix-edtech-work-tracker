@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sprix EdTech | Work Tracker</title>
+  <meta name="description" content="SPRIX Egypt - Ramadan Attendance & Remote Work Tracker">
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+  <!-- Toast Container -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <!-- Modal Overlay -->
+  <div class="modal-overlay" id="modalOverlay">
+    <div class="modal">
+      <div class="modal-header">
+        <h3 class="modal-title" id="modalTitle" data-i18n="modal.addTitle">Add Employee</h3>
+        <button class="modal-close" id="modalClose">&times;</button>
+      </div>
+      <div class="modal-body" id="modalBody">
+        <div class="form-group">
+          <label class="form-label" data-i18n="modal.name">Name</label>
+          <input type="text" class="form-input" id="empName" data-i18n-placeholder="modal.namePlaceholder"
+            placeholder="e.g. Ahmed / Tanaka">
+        </div>
+        <div class="form-group">
+          <label class="form-label" data-i18n="modal.dept">Department</label>
+          <input type="text" class="form-input" id="empDept" data-i18n-placeholder="modal.deptPlaceholder"
+            placeholder="e.g. Operations / Sales">
+        </div>
+        <div class="form-group">
+          <label class="form-label" data-i18n="modal.shift">Default Shift</label>
+          <select class="form-select" id="empShift">
+            <option value="9-15">9:00 – 15:00</option>
+            <option value="10-16">10:00 – 16:00</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label" data-i18n="modal.remoteDay">Remote Work Day</label>
+          <select class="form-select" id="empRemoteDay">
+            <option value="" data-i18n="modal.none">None</option>
+            <option value="0" data-i18n="day.sun">Sunday</option>
+            <option value="1" data-i18n="day.mon">Monday</option>
+            <option value="2" data-i18n="day.tue">Tuesday</option>
+            <option value="3" data-i18n="day.wed">Wednesday</option>
+            <option value="4" data-i18n="day.thu">Thursday</option>
+          </select>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-outline" id="modalCancel" data-i18n="modal.cancel">Cancel</button>
+        <button class="btn btn-primary" id="modalSave" data-i18n="modal.save">Save</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- App Layout -->
+  <div class="app-layout">
+
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-logo">
+          <span class="logo-text">SPRI<span class="logo-x">X</span> <span class="logo-edtech">EdTech</span></span>
+        </div>
+        <div class="sidebar-subtitle" data-i18n="sidebar.subtitle">RAMADAN WORK TRACKER 2026</div>
+      </div>
+
+      <nav class="sidebar-nav">
+        <button class="nav-item active" data-view="dashboard" id="navDashboard">
+          <span class="nav-icon">📊</span>
+          <span data-i18n="nav.dashboard">Dashboard</span>
+        </button>
+        <button class="nav-item" data-view="calendar" id="navCalendar">
+          <span class="nav-icon">📅</span>
+          <span data-i18n="nav.calendar">Calendar</span>
+        </button>
+        <button class="nav-item" data-view="employees" id="navEmployees">
+          <span class="nav-icon">👥</span>
+          <span data-i18n="nav.employees">Employees</span>
+        </button>
+        <button class="nav-item" data-view="export" id="navExport">
+          <span class="nav-icon">📤</span>
+          <span data-i18n="nav.export">Export</span>
+        </button>
+        <button class="nav-item" data-view="settings" id="navSettings">
+          <span class="nav-icon">⚙️</span>
+          <span data-i18n="nav.settings">Settings</span>
+        </button>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="ramadan-info">
+          <div class="ramadan-label" data-i18n="ramadan.label">🌙 Ramadan Day</div>
+          <div class="ramadan-day" id="ramadanDay">6</div>
+          <div class="ramadan-day-label" id="ramadanDate"></div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+
+      <!-- Header -->
+      <header class="header">
+        <div class="header-left">
+          <button class="menu-toggle" id="menuToggle">☰</button>
+          <div>
+            <h1 class="header-title" id="headerTitle" data-i18n="nav.dashboard">Dashboard</h1>
+            <p class="header-date" id="headerDate"></p>
+          </div>
+        </div>
+        <div class="header-right">
+          <div class="lang-switcher" id="langSwitcher">
+            <button class="lang-btn" data-lang="en" onclick="setLanguage('en')">EN</button>
+            <button class="lang-btn" data-lang="ja" onclick="setLanguage('ja')">日本語</button>
+            <button class="lang-btn" data-lang="ar" onclick="setLanguage('ar')">عربي</button>
+          </div>
+          <div class="connection-status" id="connectionStatus" onclick="switchView('settings')" style="cursor: pointer;"
+            title="Click to configure">
+            <span class="status-dot"></span>
+            <span data-i18n="header.localMode">Local Mode</span>
+          </div>
+        </div>
+      </header>
+
+      <!-- Status Summary -->
+      <div class="status-summary" id="statusSummary">
+        <div class="status-card total">
+          <div class="status-icon">👥</div>
+          <div class="status-info">
+            <h3 id="totalCount">0</h3>
+            <p data-i18n="status.total">Total Employees</p>
+          </div>
+        </div>
+        <div class="status-card office">
+          <div class="status-icon">🏢</div>
+          <div class="status-info">
+            <h3 id="officeCount">0</h3>
+            <p data-i18n="status.inOffice">In Office</p>
+          </div>
+        </div>
+        <div class="status-card remote">
+          <div class="status-icon">🏠</div>
+          <div class="status-info">
+            <h3 id="remoteCount">0</h3>
+            <p data-i18n="status.remote">Remote Work</p>
+          </div>
+        </div>
+        <div class="status-card leave">
+          <div class="status-icon">🌙</div>
+          <div class="status-info">
+            <h3 id="leaveCount">0</h3>
+            <p data-i18n="status.leave">Leave / Off</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Dashboard View -->
+      <div class="page-content">
+        <div class="view active" id="viewDashboard">
+          <div class="section-header">
+            <h2 class="section-title" data-i18n="dashboard.todayTitle">Today's Attendance</h2>
+            <div class="section-actions">
+              <button class="btn btn-accent" id="btnAddEmployee">
+                <span>＋</span>
+                <span data-i18n="dashboard.addEmployee">Add Employee</span>
+              </button>
+            </div>
+          </div>
+          <div class="employee-grid" id="employeeGrid">
+            <div class="empty-state" id="emptyState">
+              <div class="empty-icon">👥</div>
+              <p><span data-i18n="emp.emptyTitle">No employees registered</span><br><span
+                  data-i18n="emp.emptyAction">Click "Add Employee" to get started</span></p>
+              <button class="btn btn-primary" id="btnAddFirst" data-i18n="emp.addFirst">＋ Add First Employee</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Calendar View -->
+        <div class="view" id="viewCalendar">
+          <div class="calendar-container">
+            <div class="calendar-header">
+              <div class="calendar-nav">
+                <button class="calendar-nav-btn" id="calPrev">◀</button>
+              </div>
+              <h3 class="calendar-title" id="calTitle">March 2026</h3>
+              <div class="calendar-nav">
+                <button class="calendar-nav-btn" id="calNext">▶</button>
+              </div>
+            </div>
+            <div class="calendar-grid" id="calendarGrid"></div>
+          </div>
+          <div class="calendar-legend">
+            <div class="legend-item">
+              <span class="calendar-dot office"></span> <span data-i18n="btn.office">🏢 Office</span>
+            </div>
+            <div class="legend-item">
+              <span class="calendar-dot remote"></span> <span data-i18n="btn.remote">🏠 Remote</span>
+            </div>
+            <div class="legend-item">
+              <span class="calendar-dot leave"></span> <span data-i18n="btn.leave">🌙 Leave</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Employees View -->
+        <div class="view" id="viewEmployees">
+          <div class="section-header">
+            <h2 class="section-title" data-i18n="table.listTitle">Employee List</h2>
+            <div class="section-actions">
+              <button class="btn btn-accent" id="btnAddEmployee2">
+                <span>＋</span>
+                <span data-i18n="dashboard.add">Add</span>
+              </button>
+            </div>
+          </div>
+          <div class="employee-table-container">
+            <table class="employee-table" id="employeeTable">
+              <thead>
+                <tr>
+                  <th data-i18n="table.name">Name</th>
+                  <th data-i18n="table.department">Department</th>
+                  <th data-i18n="table.defaultShift">Default Shift</th>
+                  <th data-i18n="table.remoteDay">Remote Day</th>
+                  <th data-i18n="table.actions">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="employeeTableBody"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Export View -->
+        <div class="view" id="viewExport">
+          <div class="section-header">
+            <h2 class="section-title" data-i18n="export.title">Data Export</h2>
+          </div>
+          <div class="export-cards">
+            <div class="export-card">
+              <h3 data-i18n="export.csvTitle">📊 CSV Export</h3>
+              <p data-i18n="export.csvDesc">Download all attendance data as CSV</p>
+              <button class="btn btn-primary" id="btnExportCSV" data-i18n="export.csvBtn">📥 Download CSV</button>
+            </div>
+            <div class="export-card">
+              <h3 data-i18n="export.jsonTitle">📋 JSON Backup</h3>
+              <p data-i18n="export.jsonDesc">Save a backup of all data</p>
+              <div class="export-btn-group">
+                <button class="btn btn-outline" id="btnExportJSON" data-i18n="export.backupBtn">📥 Save Backup</button>
+                <label class="btn btn-outline" style="cursor: pointer;">
+                  <span data-i18n="export.restoreBtn">📤 Restore</span>
+                  <input type="file" accept=".json" id="btnImportJSON" style="display: none;">
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Settings View -->
+        <div class="view" id="viewSettings">
+          <div class="section-header">
+            <h2 class="section-title" data-i18n="settings.title">Settings</h2>
+          </div>
+          <div class="export-cards">
+            <div class="export-card">
+              <h3>🔗 Google Sheets Connection</h3>
+              <p data-i18n="settings.sheetsDesc">Connect to Google Sheets to sync data between Egypt office and Japan HQ
+                in real-time.</p>
+              <div class="form-group" style="margin-top: 12px;">
+                <label class="form-label">Google Apps Script URL</label>
+                <input type="url" class="form-input" id="sheetsUrl"
+                  placeholder="https://script.google.com/macros/s/...">
+              </div>
+              <div class="export-btn-group" style="margin-top: 12px;">
+                <button class="btn btn-primary" id="btnConnect" onclick="connectToSheets()">🔗 Connect</button>
+                <button class="btn btn-outline" id="btnDisconnect" onclick="disconnectSheets()"
+                  style="display:none;">⛓️‍💥 Disconnect</button>
+                <button class="btn btn-accent" id="btnSyncNow" onclick="forceSyncToSheets()" style="display:none;">🔄
+                  Sync Now</button>
+              </div>
+              <div id="syncStatus" style="margin-top: 12px; font-size: 12px; color: var(--gray-500);"></div>
+            </div>
+            <div class="export-card">
+              <h3>📖 Setup Guide</h3>
+              <ol style="font-size: 13px; color: var(--gray-600); line-height: 2; padding-left: 20px;">
+                <li>Open <a href="https://sheets.google.com" target="_blank" style="color: var(--sprix-magenta);">Google
+                    Sheets</a> and create a new spreadsheet</li>
+                <li>Go to <strong>Extensions → Apps Script</strong></li>
+                <li>Delete default code and paste the contents of <strong>Code.gs</strong></li>
+                <li>Click <strong>▶ Run → initialSetup</strong> (authorize when prompted)</li>
+                <li>Click <strong>Deploy → New deployment</strong></li>
+                <li>Type: <strong>Web app</strong>, Execute as: <strong>Me</strong>, Access: <strong>Anyone</strong>
+                </li>
+                <li>Copy the deployed URL and paste it above</li>
+              </ol>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </main>
+  </div>
+
+  <script src="i18n.js"></script>
+  <script src="app.js"></script>
+</body>
+
+</html>
