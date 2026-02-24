@@ -1423,7 +1423,25 @@ body {
    RTL Support (Arabic)
    ========================================== */
 [dir="rtl"] {
-  font-family: 'Poppins', 'Noto Sans Arabic', -apple-system, sans-serif;
+  font-family: 'Cairo', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-size: 105%;
+  line-height: 1.6;
+}
+
+[dir="rtl"] .sidebar-title {
+  font-size: 14px;
+  font-weight: 700;
+}
+
+[dir="rtl"] h1,
+[dir="rtl"] h2,
+[dir="rtl"] h3 {
+  letter-spacing: 0;
+}
+
+[dir="rtl"] .btn {
+  font-weight: 600;
+  padding: 10px 20px;
 }
 
 [dir="rtl"] .sidebar {
