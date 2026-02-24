@@ -23,6 +23,7 @@ let state = {
   editingEmployee: null,
   workMode: 'normal',
   theme: 'light',
+  textSize: 'normal', // 'normal', 'large', 'xlarge'
 };
 
 // ---- Google Sheets API config (Phase 2) ----
@@ -45,6 +46,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // Apply saved language & theme
   setLanguage(currentLang);
   document.body.classList.toggle('dark-mode', state.theme === 'dark');
+  applyTextSize();
 
   // Update modes
   const modeSelect = document.getElementById('workModeSelect');
@@ -69,6 +71,7 @@ function loadState() {
       state.attendance = parsed.attendance || {};
       state.workMode = parsed.workMode || 'normal';
       state.theme = parsed.theme || 'light';
+      state.textSize = parsed.textSize || 'normal';
 
       // Migrate old data
       state.employees.forEach(emp => {
@@ -102,6 +105,7 @@ function saveState() {
       attendance: state.attendance,
       workMode: state.workMode,
       theme: state.theme,
+      textSize: state.textSize,
     }));
   } catch (e) {
     console.error('Failed to save state:', e);
@@ -132,6 +136,7 @@ async function loadDataFromCloud() {
         attendance: state.attendance,
         workMode: state.workMode,
         theme: state.theme,
+        textSize: state.textSize,
       }));
 
       // Re-render views with new data
@@ -1263,6 +1268,26 @@ function changeTheme() {
 
   // Re-render charts to fit the theme if analytics view is open
   if (state.currentView === 'analytics') renderAnalytics();
+}
+
+function toggleTextSize() {
+  const sizes = ['normal', 'large', 'xlarge'];
+  let idx = sizes.indexOf(state.textSize);
+  if (idx === -1) idx = 0;
+  idx = (idx + 1) % sizes.length;
+  state.textSize = sizes[idx];
+
+  saveState();
+  applyTextSize();
+}
+
+function applyTextSize() {
+  document.body.classList.remove('text-large', 'text-xlarge');
+  if (state.textSize === 'large') {
+    document.body.classList.add('text-large');
+  } else if (state.textSize === 'xlarge') {
+    document.body.classList.add('text-xlarge');
+  }
 }
 
 function initSecurity() {

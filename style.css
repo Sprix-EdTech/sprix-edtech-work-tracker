@@ -1504,3 +1504,35 @@ body {
     margin-right: 0;
   }
 }
+
+/* ==========================================
+   Text Accessibility (Font Size Toggle)
+   ========================================== */
+body.text-large {
+  zoom: 1.08;
+}
+
+body.text-xlarge {
+  zoom: 1.18;
+}
+
+/* Firefox compatibility fallback */
+@-moz-document url-prefix() {
+  body.text-large {
+    transform: scale(1.08);
+    transform-origin: top left;
+    width: 92.59%;
+  }
+
+  body.text-xlarge {
+    transform: scale(1.18);
+    transform-origin: top left;
+    width: 84.74%;
+  }
+}
+
+.font-size-btn {
+  font-family: 'Times New Roman', serif, 'Noto Serif', 'Noto Kufi Arabic';
+  font-size: 15px !important;
+  font-weight: 700 !important;
+}
