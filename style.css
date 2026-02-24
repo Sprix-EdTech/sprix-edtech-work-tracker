@@ -1733,3 +1733,58 @@ html[dir="rtl"] .status-card h3 {
   flex: 0 0 auto !important;
   min-width: 220px !important;
 }
+
+/* Phase 9.1: Fix Sidebar & Lang Switcher Visibility on Liquid Glass */
+
+/* Fix Sidebar Text Contrast */
+.sidebar {
+  color: var(--sprix-navy) !important;
+}
+.sidebar-nav .nav-item {
+  color: var(--gray-600) !important;
+}
+.sidebar-nav .nav-item.active {
+  color: var(--sprix-navy) !important;
+  background: rgba(0, 0, 0, 0.05) !important;
+}
+.sidebar-subtitle {
+  color: var(--gray-500) !important;
+}
+.sidebar-header {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08) !important;
+}
+
+[data-theme="dark"] .sidebar {
+  color: var(--white) !important;
+}
+[data-theme="dark"] .sidebar-nav .nav-item {
+  color: var(--gray-400) !important;
+}
+[data-theme="dark"] .sidebar-nav .nav-item.active {
+  color: var(--white) !important;
+  background: rgba(255, 255, 255, 0.1) !important;
+}
+
+/* Fix Lang Switcher Contrast */
+.lang-switcher {
+  background: rgba(255, 255, 255, 0.8) !important;
+  border: 1px solid rgba(0, 0, 0, 0.1) !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05) !important;
+}
+.lang-btn {
+  color: var(--gray-700) !important;
+  font-weight: 700 !important;
+}
+.lang-btn.active {
+  background: var(--sprix-navy) !important;
+  color: var(--white) !important;
+}
+
+[data-theme="dark"] .lang-switcher {
+  background: rgba(0, 0, 0, 0.2) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+[data-theme="dark"] .lang-btn.active {
+  background: var(--sprix-blossom) !important;
+  color: var(--white) !important;
+}
