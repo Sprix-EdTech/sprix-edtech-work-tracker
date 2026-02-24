@@ -22,6 +22,7 @@ let state = {
   calendarYear: new Date().getFullYear(),
   editingEmployee: null,
   workMode: 'normal',
+  theme: 'light',
 };
 
 // ---- Google Sheets API config (Phase 2) ----
@@ -41,13 +42,17 @@ document.addEventListener('DOMContentLoaded', () => {
   initSettings();
   initSecurity();
 
-  // Apply saved language
+  // Apply saved language & theme
   setLanguage(currentLang);
+  document.body.classList.toggle('dark-mode', state.theme === 'dark');
 
   // Update modes
   const modeSelect = document.getElementById('workModeSelect');
   if (modeSelect) modeSelect.value = state.workMode;
   changeWorkMode(); // ensure shift options reflect current mode
+
+  const themeSelect = document.getElementById('themeSelect');
+  if (themeSelect) themeSelect.value = state.theme;
 });
 
 // ---- State Management ----
@@ -59,12 +64,16 @@ function loadState() {
       state.employees = parsed.employees || [];
       state.attendance = parsed.attendance || {};
       state.workMode = parsed.workMode || 'normal';
+      state.theme = parsed.theme || 'light';
 
       // Migrate old data
       state.employees.forEach(emp => {
         if (emp.defaultShift === '9-15') emp.defaultShift = 'opt1';
         if (emp.defaultShift === '10-16') emp.defaultShift = 'opt2';
       });
+
+      // Sort alphabetically
+      state.employees.sort((a, b) => a.name.localeCompare(b.name));
       Object.keys(state.attendance).forEach(date => {
         Object.keys(state.attendance[date]).forEach(empId => {
           if (state.attendance[date][empId].shift === '9-15') state.attendance[date][empId].shift = 'opt1';
@@ -88,6 +97,7 @@ function saveState() {
       employees: state.employees,
       attendance: state.attendance,
       workMode: state.workMode,
+      theme: state.theme,
     }));
   } catch (e) {
     console.error('Failed to save state:', e);
@@ -106,7 +116,10 @@ async function loadDataFromCloud() {
     const data = await response.json();
 
     if (data.success) {
-      if (data.employees && data.employees.length > 0) state.employees = data.employees;
+      if (data.employees && data.employees.length > 0) {
+        state.employees = data.employees;
+        state.employees.sort((a, b) => a.name.localeCompare(b.name));
+      }
       if (data.attendance) state.attendance = Object.assign(state.attendance, data.attendance);
 
       // Re-save to local silently
@@ -114,12 +127,14 @@ async function loadDataFromCloud() {
         employees: state.employees,
         attendance: state.attendance,
         workMode: state.workMode,
+        theme: state.theme,
       }));
 
       // Re-render views with new data
       if (state.currentView === 'dashboard') renderDashboard();
       if (state.currentView === 'calendar') renderCalendar();
       if (state.currentView === 'employees') renderEmployeeTable();
+      if (state.currentView === 'analytics') renderAnalytics();
       renderStatusCards();
     }
   } catch (e) {
@@ -184,6 +199,7 @@ function switchView(viewName) {
   // Render view-specific content
   if (viewName === 'calendar') renderCalendar();
   if (viewName === 'employees') renderEmployeeTable();
+  if (viewName === 'analytics') renderAnalytics();
 
   render();
 }
@@ -528,6 +544,9 @@ function saveEmployee() {
     showToast(`${name} ${t('toast.added')}`, 'success');
   }
 
+  // Sort employees alphabetically by name
+  state.employees.sort((a, b) => a.name.localeCompare(b.name));
+
   saveState();
   closeModal();
   render();
@@ -711,7 +730,93 @@ function renderCalendar() {
   };
 }
 
-// ---- Export ----
+// ---- Analytics ----
+let attendanceChartInstance = null;
+
+function renderAnalytics() {
+  const container = document.getElementById('analyticsSummary');
+  const canvas = document.getElementById('attendanceChart');
+  if (!container || !canvas) return;
+
+  if (state.employees.length === 0) {
+    container.innerHTML = `<p style="text-align:center; color: var(--gray-400);">${t('analytics.empty')}</p>`;
+    if (attendanceChartInstance) attendanceChartInstance.destroy();
+    return;
+  }
+
+  const today = getDateKey(new Date());
+  const todayData = state.attendance[today] || {};
+
+  let officeCount = 0;
+  let remoteCount = 0;
+  let leaveCount = 0;
+
+  state.employees.forEach(emp => {
+    const record = todayData[emp.id];
+    const status = record ? record.status : getDefaultStatus(emp);
+    if (status === 'office') officeCount++;
+    else if (status === 'remote') remoteCount++;
+    else leaveCount++;
+  });
+
+  const total = state.employees.length;
+
+  container.innerHTML = `
+    <div class="analytics-stat">
+      <div class="stat-label">👥 ${t('dashboard.todayTitle')}</div>
+      <div class="stat-value">${total}</div>
+    </div>
+    <div class="analytics-stat" style="color: var(--success);">
+      <div class="stat-label">🏢 ${t('analytics.office')}</div>
+      <div class="stat-value">${officeCount}</div>
+      <div class="stat-percent">${Math.round((officeCount / total) * 100)}%</div>
+    </div>
+    <div class="analytics-stat" style="color: var(--warning);">
+      <div class="stat-label">🏠 ${t('analytics.remote')}</div>
+      <div class="stat-value">${remoteCount}</div>
+      <div class="stat-percent">${Math.round((remoteCount / total) * 100)}%</div>
+    </div>
+    <div class="analytics-stat" style="color: var(--gray-400);">
+      <div class="stat-label">🌙 ${t('analytics.leave')}</div>
+      <div class="stat-value">${leaveCount}</div>
+       <div class="stat-percent">${Math.round((leaveCount / total) * 100)}%</div>
+    </div>
+  `;
+
+  // Render Chart
+  const ctx = canvas.getContext('2d');
+  if (attendanceChartInstance) {
+    attendanceChartInstance.destroy();
+  }
+
+  const isDark = state.theme === 'dark';
+  const textColor = isDark ? '#e2e8f0' : '#475569';
+
+  attendanceChartInstance = new Chart(ctx, {
+    type: 'doughnut',
+    data: {
+      labels: [t('analytics.office'), t('analytics.remote'), t('analytics.leave')],
+      datasets: [{
+        data: [officeCount, remoteCount, leaveCount],
+        backgroundColor: ['#10b981', '#f59e0b', '#cbd5e1'],
+        borderWidth: isDark ? 2 : 0,
+        borderColor: isDark ? '#1e293b' : '#ffffff',
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: {
+          position: 'bottom',
+          labels: { color: textColor }
+        }
+      }
+    }
+  });
+}
+
+// ---- Export / Import ----
 function initExport() {
   document.getElementById('btnExportCSV').addEventListener('click', exportCSV);
   document.getElementById('btnExportJSON').addEventListener('click', exportJSON);
@@ -1038,6 +1143,18 @@ function changeWorkMode() {
   // Re-render views if they are open
   if (state.currentView === 'dashboard') renderDashboard();
   if (state.currentView === 'employees') renderEmployeeTable();
+}
+
+function changeTheme() {
+  const themeSelect = document.getElementById('themeSelect');
+  if (!themeSelect) return;
+
+  state.theme = themeSelect.value;
+  saveState();
+  document.body.classList.toggle('dark-mode', state.theme === 'dark');
+
+  // Re-render charts to fit the theme if analytics view is open
+  if (state.currentView === 'analytics') renderAnalytics();
 }
 
 function initSecurity() {

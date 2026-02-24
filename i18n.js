@@ -24,6 +24,11 @@ const TRANSLATIONS = {
         en: 'Export',
         ar: 'تصدير',
     },
+    'nav.analytics': {
+        ja: 'アナリティクス',
+        en: 'Analytics',
+        ar: 'التحليلات',
+    },
 
     // ---- Header ----
     'header.localMode': {
@@ -440,9 +445,9 @@ const TRANSLATIONS = {
         ar: 'وضع العمل',
     },
     'mode.normal': {
-        ja: '通常モード (休憩込 9H)',
-        en: 'Normal Mode (9H inc. break)',
-        ar: 'الوضع العادي (9 ساعات مع استراحة)',
+        ja: '通常モード (休憩込 8H)',
+        en: 'Normal Mode (8H inc. break)',
+        ar: 'الوضع العادي (8 ساعات مع استراحة)',
     },
     'mode.ramadan': {
         ja: 'ラマダンモード (短縮 6H)',
@@ -452,14 +457,14 @@ const TRANSLATIONS = {
 
     // ---- Shifts ----
     'shift.normal1': {
-        ja: '9:00 - 18:00',
-        en: '9:00 - 18:00',
-        ar: '9:00 - 18:00',
+        ja: '9:00 - 17:00',
+        en: '9:00 - 17:00',
+        ar: '9:00 - 17:00',
     },
     'shift.normal2': {
-        ja: '10:00 - 19:00',
-        en: '10:00 - 19:00',
-        ar: '10:00 - 19:00',
+        ja: '10:00 - 18:00',
+        en: '10:00 - 18:00',
+        ar: '10:00 - 18:00',
     },
     'shift.ramadan1': {
         ja: '9:00 - 15:00',
@@ -475,6 +480,50 @@ const TRANSLATIONS = {
         ja: '自由設定 (カスタム)...',
         en: 'Custom Time...',
         ar: 'وقت مخصص...',
+    },
+
+    // ---- Settings: Theme ----
+    'settings.theme': {
+        ja: 'テーマ・外観',
+        en: 'Theme & Appearance',
+        ar: 'المظهر والسمات',
+    },
+    'theme.light': {
+        ja: 'ライトモード',
+        en: 'Light Mode',
+        ar: 'الوضع الفاتح',
+    },
+    'theme.dark': {
+        ja: 'ダークモード',
+        en: 'Dark Mode',
+        ar: 'الوضع الداكن',
+    },
+
+    // ---- Analytics ----
+    'analytics.title': {
+        ja: '統計・グラフ',
+        en: 'Statistics & Analytics',
+        ar: 'الإحصائيات والتحليلات',
+    },
+    'analytics.empty': {
+        ja: 'データがありません',
+        en: 'No Data Available',
+        ar: 'لا توجد بيانات متاحة',
+    },
+    'analytics.office': {
+        ja: 'オフィス',
+        en: 'Office',
+        ar: 'المكتب',
+    },
+    'analytics.remote': {
+        ja: 'リモート',
+        en: 'Remote',
+        ar: 'عن بُعد',
+    },
+    'analytics.leave': {
+        ja: '休暇',
+        en: 'Leave',
+        ar: 'إجازة',
     },
 
     // ---- Auth ----

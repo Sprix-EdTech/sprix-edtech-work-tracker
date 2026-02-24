@@ -9,6 +9,7 @@
   <link rel="icon" type="image/png" href="favicon.png?v=2">
   <link rel="apple-touch-icon" href="favicon.png?v=2">
   <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 
 <body>
@@ -99,6 +100,10 @@
         <button class="nav-item active" data-view="dashboard" id="navDashboard">
           <span class="nav-icon">📊</span>
           <span data-i18n="nav.dashboard">Dashboard</span>
+        </button>
+        <button class="nav-item" data-view="analytics" id="navAnalytics">
+          <span class="nav-icon">📈</span>
+          <span data-i18n="nav.analytics">Analytics</span>
         </button>
         <button class="nav-item" data-view="calendar" id="navCalendar">
           <span class="nav-icon">📅</span>
@@ -208,6 +213,21 @@
           </div>
         </div>
 
+        <!-- Analytics View -->
+        <div class="view" id="viewAnalytics">
+          <div class="section-header">
+            <h2 class="section-title" data-i18n="analytics.title">Statistics & Analytics</h2>
+          </div>
+          <div class="analytics-container">
+            <div class="chart-wrapper">
+              <canvas id="attendanceChart"></canvas>
+            </div>
+            <div class="analytics-summary" id="analyticsSummary">
+              <!-- Summary blocks populated by JS -->
+            </div>
+          </div>
+        </div>
+
         <!-- Calendar View -->
         <div class="view" id="viewCalendar">
           <div class="calendar-container">
@@ -297,8 +317,19 @@
               <h3><span style="font-size: 1.2em;">🏢</span> <span data-i18n="settings.workMode">Working Mode</span></h3>
               <div class="form-group" style="margin-top: 12px;">
                 <select class="form-select" id="workModeSelect" onchange="changeWorkMode()">
-                  <option value="normal" data-i18n="mode.normal">Normal Mode (9H inc. break)</option>
+                  <option value="normal" data-i18n="mode.normal">Normal Mode (8H inc. break)</option>
                   <option value="ramadan" data-i18n="mode.ramadan">Ramadan Mode (6H short)</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="export-card">
+              <h3><span style="font-size: 1.2em;">🎨</span> <span data-i18n="settings.theme">Theme & Appearance</span>
+              </h3>
+              <div class="form-group" style="margin-top: 12px;">
+                <select class="form-select" id="themeSelect" onchange="changeTheme()">
+                  <option value="light" data-i18n="theme.light">Light Mode</option>
+                  <option value="dark" data-i18n="theme.dark">Dark Mode</option>
                 </select>
               </div>
             </div>
