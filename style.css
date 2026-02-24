@@ -1508,26 +1508,40 @@ body {
 /* ==========================================
    Text Accessibility (Font Size Toggle)
    ========================================== */
+@media (min-width: 768px) {
+  body {
+    zoom: 1.08;
+  }
+}
+
 body.text-large {
-  zoom: 1.08;
+  zoom: 1.15;
 }
 
 body.text-xlarge {
-  zoom: 1.18;
+  zoom: 1.25;
 }
 
 /* Firefox compatibility fallback */
 @-moz-document url-prefix() {
+  @media (min-width: 768px) {
+    body {
+      transform: scale(1.08);
+      transform-origin: top left;
+      width: 92.59%;
+    }
+  }
+
   body.text-large {
-    transform: scale(1.08);
+    transform: scale(1.15);
     transform-origin: top left;
-    width: 92.59%;
+    width: 86.95%;
   }
 
   body.text-xlarge {
-    transform: scale(1.18);
+    transform: scale(1.25);
     transform-origin: top left;
-    width: 84.74%;
+    width: 80%;
   }
 }
 
