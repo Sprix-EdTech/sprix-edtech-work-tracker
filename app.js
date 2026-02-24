@@ -431,6 +431,17 @@ function initModal() {
   });
 
   saveBtn.addEventListener('click', saveEmployee);
+
+  const shiftSelect = document.getElementById('empShift');
+  if (shiftSelect) {
+    shiftSelect.addEventListener('change', (e) => {
+      const customGroup = document.getElementById('customShiftGroup');
+      if (customGroup) {
+        customGroup.style.display = e.target.value === 'custom' ? 'block' : 'none';
+        if (e.target.value === 'custom') document.getElementById('empCustomShift').focus();
+      }
+    });
+  }
 }
 
 function openModal(employee = null) {
