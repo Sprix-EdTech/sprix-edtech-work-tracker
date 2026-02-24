@@ -236,54 +236,28 @@ function updateHeader() {
   document.getElementById('headerDate').textContent = dateStr;
 }
 
-function updateHijriDate() {
-  const dayEl = document.getElementById('hijriDay');
-  const monthEl = document.getElementById('hijriMonth');
-  if (!dayEl || !monthEl) return;
-
+function updateRamadanDay() {
   const now = new Date();
-
-  // Calculate Ramadan progress
+  now.setHours(0, 0, 0, 0);
   const start = new Date(RAMADAN_START);
   start.setHours(0, 0, 0, 0);
-  const nowOnlyDate = new Date();
-  nowOnlyDate.setHours(0, 0, 0, 0);
-  const diffTime = nowOnlyDate - start;
+
+  const diffTime = now - start;
   const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
 
-  // Choose locale based on current language
-  let locale = 'en-US-u-ca-islamic';
-  if (currentLang === 'ja') locale = 'ja-JP-u-ca-islamic-nu-latn';
-  if (currentLang === 'ar') locale = 'ar-SA-u-ca-islamic';
+  const dayEl = document.getElementById('ramadanDay');
+  const dateEl = document.getElementById('ramadanDate');
+  if (!dayEl || !dateEl) return;
 
-  let hijriDay = '';
-  let hijriMonth = '';
-  try {
-    const formatter = new Intl.DateTimeFormat(locale, {
-      day: 'numeric',
-      month: 'long'
-    });
-
-    const parts = formatter.formatToParts(now);
-    hijriDay = parts.find(p => p.type === 'day')?.value || '';
-    hijriMonth = parts.find(p => p.type === 'month')?.value || '';
-  } catch (e) {
-    // Fallback if browser doesn't support u-ca-islamic
-    hijriDay = now.getDate();
-    hijriMonth = now.toLocaleString(currentLang, { month: 'short' });
-  }
-
-  // Large text: Month + Date
-  dayEl.textContent = `${hijriMonth} ${hijriDay}`;
-  dayEl.style.fontSize = '20px';
-
-  // Small text: Progress/Countdown
   if (diffDays >= 0 && diffDays < 30) {
-    monthEl.textContent = `Day ${diffDays + 1} ${t('ramadan.dayOf')}`;
+    dayEl.textContent = diffDays + 1;
+    dateEl.textContent = `Day ${diffDays + 1} ${t('ramadan.dayOf')}`;
   } else if (diffDays < 0) {
-    monthEl.textContent = `${Math.abs(diffDays)} ${t('ramadan.daysUntil')}`;
+    dayEl.textContent = Math.abs(diffDays);
+    dateEl.textContent = `${Math.abs(diffDays)} ${t('ramadan.daysUntil')}`;
   } else {
-    monthEl.textContent = t('ramadan.completed');
+    dayEl.textContent = '✓';
+    dateEl.textContent = t('ramadan.completed');
   }
 }
 

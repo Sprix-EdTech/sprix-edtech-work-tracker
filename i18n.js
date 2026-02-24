@@ -49,9 +49,9 @@ const TRANSLATIONS = {
         ar: 'متتبع العمل',
     },
     'ramadan.label': {
-        ja: '🌙 イスラム暦',
-        en: '🌙 Islamic Date',
-        ar: '🌙 التاريخ الهجري',
+        ja: '🌙 ラマダン',
+        en: '🌙 Ramadan Day',
+        ar: '🌙 يوم رمضان',
     },
     'ramadan.dayOf': {
         ja: '日目 / 30日',
@@ -613,7 +613,7 @@ function updateAllText() {
 
     // Update header date
     if (typeof updateHeader === 'function') updateHeader();
-    if (typeof updateHijriDate === 'function') updateHijriDate();
+    if (typeof updateRamadanDay === 'function') updateRamadanDay();
 
     // Re-render dynamic content
     if (typeof render === 'function') render();
