@@ -306,7 +306,22 @@ function renderDashboard() {
 
     const shiftText = shift === 'opt1'
       ? t(state.workMode === 'normal' ? 'shift.normal1' : 'shift.ramadan1')
-      : t(state.workMode === 'normal' ? 'shift.normal2' : 'shift.ramadan2');
+      : shift === 'opt2'
+        ? t(state.workMode === 'normal' ? 'shift.normal2' : 'shift.ramadan2')
+        : escapeHTML(shift);
+
+    let shiftButtonsHtml = `
+          <button class="shift-btn ${shift === 'opt1' ? 'active' : ''}"
+                  onclick="setShift('${emp.id}', 'opt1')">${t(state.workMode === 'normal' ? 'shift.normal1' : 'shift.ramadan1')}</button>
+          <button class="shift-btn ${shift === 'opt2' ? 'active' : ''}"
+                  onclick="setShift('${emp.id}', 'opt2')">${t(state.workMode === 'normal' ? 'shift.normal2' : 'shift.ramadan2')}</button>
+    `;
+    if (emp.defaultShift !== 'opt1' && emp.defaultShift !== 'opt2') {
+      shiftButtonsHtml += `
+          <button class="shift-btn ${shift === emp.defaultShift ? 'active' : ''}"
+                  onclick="setShift('${emp.id}', '${escapeHTML(emp.defaultShift)}')">${escapeHTML(emp.defaultShift)}</button>
+       `;
+    }
 
     return `
       <div class="employee-card ${status}" data-emp-id="${emp.id}">
@@ -343,10 +358,7 @@ function renderDashboard() {
         </div>
 
         <div class="shift-selector">
-          <button class="shift-btn ${shift === 'opt1' ? 'active' : ''}"
-                  onclick="setShift('${emp.id}', 'opt1')">${t(state.workMode === 'normal' ? 'shift.normal1' : 'shift.ramadan1')}</button>
-          <button class="shift-btn ${shift === 'opt2' ? 'active' : ''}"
-                  onclick="setShift('${emp.id}', 'opt2')">${t(state.workMode === 'normal' ? 'shift.normal2' : 'shift.ramadan2')}</button>
+${shiftButtonsHtml}
         </div>
       </div>
     `;
@@ -429,17 +441,31 @@ function openModal(employee = null) {
   const shiftSelect = document.getElementById('empShift');
   const remoteDaySelect = document.getElementById('empRemoteDay');
 
+  const customShiftGroup = document.getElementById('customShiftGroup');
+  const customShiftInput = document.getElementById('empCustomShift');
+
   if (employee) {
     title.textContent = t('modal.editTitle');
     nameInput.value = employee.name;
     deptInput.value = employee.department || '';
-    shiftSelect.value = employee.defaultShift || 'opt1';
     remoteDaySelect.value = employee.remoteDay !== undefined ? employee.remoteDay : '';
+
+    if (employee.defaultShift === 'opt1' || employee.defaultShift === 'opt2') {
+      shiftSelect.value = employee.defaultShift;
+      customShiftGroup.style.display = 'none';
+      customShiftInput.value = '';
+    } else {
+      shiftSelect.value = 'custom';
+      customShiftGroup.style.display = 'block';
+      customShiftInput.value = employee.defaultShift;
+    }
   } else {
     title.textContent = t('modal.addTitle');
     nameInput.value = '';
     deptInput.value = '';
     shiftSelect.value = 'opt1';
+    customShiftGroup.style.display = 'none';
+    customShiftInput.value = '';
     remoteDaySelect.value = '';
   }
 
@@ -455,8 +481,13 @@ function closeModal() {
 function saveEmployee() {
   const name = document.getElementById('empName').value.trim();
   const department = document.getElementById('empDept').value.trim();
-  const defaultShift = document.getElementById('empShift').value;
   const remoteDay = document.getElementById('empRemoteDay').value;
+  let defaultShift = document.getElementById('empShift').value;
+
+  if (defaultShift === 'custom') {
+    defaultShift = document.getElementById('empCustomShift').value.trim();
+    if (!defaultShift) defaultShift = '09:00 - 18:00'; // fallback if left empty
+  }
 
   if (!name) {
     showToast(t('toast.nameRequired'), 'error');
@@ -982,11 +1013,13 @@ function changeWorkMode() {
       shiftSelect.innerHTML = `
         <option value="opt1" data-i18n="shift.normal1">${t('shift.normal1')}</option>
         <option value="opt2" data-i18n="shift.normal2">${t('shift.normal2')}</option>
+        <option value="custom" data-i18n="shift.custom">${t('shift.custom')}</option>
       `;
     } else {
       shiftSelect.innerHTML = `
         <option value="opt1" data-i18n="shift.ramadan1">${t('shift.ramadan1')}</option>
         <option value="opt2" data-i18n="shift.ramadan2">${t('shift.ramadan2')}</option>
+        <option value="custom" data-i18n="shift.custom">${t('shift.custom')}</option>
       `;
     }
   }

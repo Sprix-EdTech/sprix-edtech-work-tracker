@@ -222,6 +222,16 @@ const TRANSLATIONS = {
         en: 'Default Shift',
         ar: 'الوردية الافتراضية',
     },
+    'modal.customShift': {
+        ja: 'カスタム時間設定',
+        en: 'Custom Shift Time',
+        ar: 'وقت الوردية المخصص',
+    },
+    'modal.customShiftPlaceholder': {
+        ja: '例: 08:30 - 17:30',
+        en: 'e.g. 08:30 - 17:30',
+        ar: 'مثال: 08:30 - 17:30',
+    },
     'modal.remoteDay': {
         ja: 'リモートワーク曜日',
         en: 'Remote Work Day',
@@ -460,6 +470,11 @@ const TRANSLATIONS = {
         ja: '10:00 - 16:00',
         en: '10:00 - 16:00',
         ar: '10:00 - 16:00',
+    },
+    'shift.custom': {
+        ja: '自由設定 (カスタム)...',
+        en: 'Custom Time...',
+        ar: 'وقت مخصص...',
     },
 
     // ---- Auth ----

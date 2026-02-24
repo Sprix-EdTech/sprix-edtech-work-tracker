@@ -56,7 +56,13 @@
           <select class="form-select" id="empShift">
             <option value="opt1" data-i18n="shift.normal1">9:00 - 18:00</option>
             <option value="opt2" data-i18n="shift.normal2">10:00 - 19:00</option>
+            <option value="custom" data-i18n="shift.custom">Custom Time...</option>
           </select>
+        </div>
+        <div class="form-group" id="customShiftGroup" style="display: none;">
+          <label class="form-label" data-i18n="modal.customShift">Custom Shift Time</label>
+          <input type="text" class="form-input" id="empCustomShift" data-i18n-placeholder="modal.customShiftPlaceholder"
+            placeholder="e.g. 08:30 - 17:30">
         </div>
         <div class="form-group">
           <label class="form-label" data-i18n="modal.remoteDay">Remote Work Day</label>
