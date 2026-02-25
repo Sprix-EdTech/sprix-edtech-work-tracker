@@ -7,6 +7,16 @@ function getEgyptTimeMinutes() {
   return hour * 60 + minute;
 }
 
+function getCurrentEgyptDateKey() {
+  const dtf = new Intl.DateTimeFormat('en-US', { timeZone: 'Africa/Cairo', year: 'numeric', month: '2-digit', day: '2-digit' });
+  const parts = dtf.formatToParts(new Date());
+  const m = parts.find(p => p.type === 'month').value;
+  const d = parts.find(p => p.type === 'day').value;
+  const y = parts.find(p => p.type === 'year').value;
+  return `${y}-${m}-${d}`;
+}
+
+
 /* ==========================================
    SPRIX Ramadan Work Tracker — Application
    ========================================== */
@@ -291,7 +301,7 @@ function render() {
 }
 
 function renderStatusCards() {
-  const today = getDateKey(new Date());
+  const today = getCurrentEgyptDateKey();
   const todayData = state.attendance[today] || {};
 
   const currentMinutes = typeof getEgyptTimeMinutes === 'function' ? getEgyptTimeMinutes() : 0;
@@ -380,7 +390,7 @@ function renderDashboard() {
     return;
   }
 
-  const today = getDateKey(new Date());
+  const today = getCurrentEgyptDateKey();
   const todayData = state.attendance[today] || {};
 
   // Apply Filter Logic
@@ -527,7 +537,7 @@ function createEmptyState() {
 
 // ---- Status & Shift ----
 function setStatus(empId, status) {
-  const today = getDateKey(new Date());
+  const today = getCurrentEgyptDateKey();
   const emp = state.employees.find(e => e.id === empId);
 
   if (!state.attendance[today]) state.attendance[today] = {};
@@ -551,7 +561,7 @@ function getShiftString(shiftValue) {
 }
 
 function setShift(empId, shift) {
-  const today = getDateKey(new Date());
+  const today = getCurrentEgyptDateKey();
   if (!state.attendance[today]) state.attendance[today] = {};
   if (!state.attendance[today][empId]) {
     state.attendance[today][empId] = {
@@ -585,7 +595,7 @@ function clearFilter() {
 function updateGlobalStats() {
   if (state.employees.length === 0) return;
 
-  const today = getDateKey(new Date());
+  const today = getCurrentEgyptDateKey();
   const todayData = state.attendance[today] || {};
 
   let total = state.employees.length;
@@ -977,7 +987,7 @@ function renderAnalytics(officeVal, remoteVal, leaveVal, finishedVal, totalVal) 
 
   if (officeVal === undefined) {
     // Fallback if called directly without arguments
-    const today = getDateKey(new Date());
+    const today = getCurrentEgyptDateKey();
     const todayData = state.attendance[today] || {};
     officeCount = 0; remoteCount = 0; leaveCount = 0; finishedCount = 0;
 
@@ -1099,7 +1109,7 @@ function exportCSV() {
     });
   });
 
-  downloadFile(csv, `sprix-ramadan-attendance-${getDateKey(new Date())}.csv`, 'text/csv');
+  downloadFile(csv, `sprix-ramadan-attendance-${getCurrentEgyptDateKey()}.csv`, 'text/csv');
   showToast(t('toast.csvDone'), 'success');
 }
 
@@ -1110,7 +1120,7 @@ function exportJSON() {
     exportDate: new Date().toISOString(),
   }, null, 2);
 
-  downloadFile(data, `sprix-ramadan-backup-${getDateKey(new Date())}.json`, 'application/json');
+  downloadFile(data, `sprix-ramadan-backup-${getCurrentEgyptDateKey()}.json`, 'application/json');
   showToast(t('toast.backupDone'), 'success');
 }
 
