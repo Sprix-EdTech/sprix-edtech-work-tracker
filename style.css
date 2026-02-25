@@ -80,6 +80,10 @@ body.dark-mode {
   --shadow-lg: 0 12px 36px rgba(0, 0, 0, 0.4);
   --shadow-xl: 0 24px 48px rgba(0, 0, 0, 0.5);
 
+  --status-office: #0a4bb3;
+  --status-remote: #ff33ad;
+  --status-leave: #94a3b8;
+  --status-finished: #64748b;
   --status-office-bg: rgba(10, 75, 179, 0.4);
   --status-remote-bg: rgba(255, 51, 173, 0.25);
   --status-leave-bg: rgba(148, 163, 184, 0.15);
@@ -642,21 +646,21 @@ body {
   }
 
   .status-btn.active.office-btn {
-    background: var(--status-office-bg);
-    border-color: var(--status-office);
-    color: var(--status-office);
+    background: var(--status-office-bg) !important;
+    border-color: var(--status-office) !important;
+    color: var(--status-office) !important;
   }
 
   .status-btn.active.remote-btn {
-    background: var(--status-remote-bg);
-    border-color: var(--status-remote);
-    color: var(--status-remote);
+    background: var(--status-remote-bg) !important;
+    border-color: var(--status-remote) !important;
+    color: var(--status-remote) !important;
   }
 
   .status-btn.active.leave-btn {
-    background: var(--status-leave-bg);
-    border-color: var(--status-leave);
-    color: var(--status-leave);
+    background: var(--status-leave-bg) !important;
+    border-color: var(--status-leave) !important;
+    color: var(--status-leave) !important;
   }
 
   /* ---- Buttons ---- */
@@ -2090,15 +2094,15 @@ html {
   }
 
   /* --- Status & Shift Buttons: Touch-Friendly --- */
-  .status-buttons,
-  .shift-buttons {
+  .status-selector,
+  .shift-selector {
     display: flex !important;
     flex-wrap: wrap !important;
     gap: 6px !important;
   }
 
-  .status-buttons .status-btn,
-  .shift-buttons .shift-btn {
+  .status-selector .status-btn,
+  .shift-selector .shift-btn {
     font-size: calc(var(--text-scale, 1) * 12px) !important;
     padding: 8px 12px !important;
     min-height: 40px !important;

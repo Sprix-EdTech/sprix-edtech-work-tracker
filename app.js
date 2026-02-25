@@ -325,10 +325,14 @@ function renderStatusCards() {
     else if (status === 'remote') remoteCount++;
   });
 
-  document.getElementById('totalCount').textContent = state.employees.length;
-  document.getElementById('officeCount').textContent = officeCount;
-  document.getElementById('remoteCount').textContent = remoteCount;
-  document.getElementById('leaveCount').textContent = leaveCount;
+  const gt = document.getElementById('globalTotal');
+  if (gt) gt.textContent = state.employees.length;
+  const go = document.getElementById('globalOffice');
+  if (go) go.textContent = officeCount;
+  const gr = document.getElementById('globalRemote');
+  if (gr) gr.textContent = remoteCount;
+  const gl = document.getElementById('globalLeave');
+  if (gl) gl.textContent = leaveCount;
 }
 
 function getDefaultStatus(emp) {
