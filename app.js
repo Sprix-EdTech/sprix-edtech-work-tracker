@@ -1,3 +1,12 @@
+
+function getEgyptTimeMinutes() {
+  const dtf = new Intl.DateTimeFormat('en-US', { timeZone: 'Africa/Cairo', hour: '2-digit', minute: '2-digit', hour12: false });
+  const parts = dtf.formatToParts(new Date());
+  const hour = parseInt(parts.find(p => p.type === 'hour').value, 10);
+  const minute = parseInt(parts.find(p => p.type === 'minute').value, 10);
+  return hour * 60 + minute;
+}
+
 /* ==========================================
    SPRIX Ramadan Work Tracker — Application
    ========================================== */
@@ -259,8 +268,7 @@ function updateRamadanDay() {
     const d = diffDays + 1;
     // Line 2: e.g. "7日", "Day 7"
     if (currentLang === 'ja') dayEl.textContent = `${d}日`;
-    else if (currentLang === 'en') dayEl.textContent = `Day ${d}`;
-    else dayEl.textContent = `يوم ${d}`;
+    else dayEl.textContent = `${d}`; // EN/AR line 2 is just the number
 
     // Line 3: e.g. "7 日目 / 30日", "Day 7 / 30 Days"
     if (currentLang === 'ja') dateEl.textContent = `${d} 日目 / 30日`;
@@ -339,27 +347,32 @@ function renderDashboard() {
   let employeesToRender = state.employees;
 
   if (state.currentFilter && state.currentFilter !== 'total') {
-    const now = new Date();
-    const currentMinutes = now.getHours() * 60 + now.getMinutes();
+    const currentMinutes = getEgyptTimeMinutes();
 
     employeesToRender = state.employees.filter(emp => {
       const record = todayData[emp.id];
       const status = record ? record.status : getDefaultStatus(emp);
 
       let isFinished = false;
+      let isStarted = true;
       if (status !== 'leave') {
         const shiftText = getShiftString(record?.shift || getDefaultShift(emp));
-        const endTimeStr = shiftText.split('-')[1]?.trim();
+        const parts = shiftText.split('-');
+        const startTimeStr = parts[0]?.trim();
+        const endTimeStr = parts[1]?.trim();
         if (endTimeStr) {
           const [hours, mins] = endTimeStr.split(':').map(Number);
-          if (currentMinutes >= hours * 60 + mins) {
-            isFinished = true;
-          }
+          if (currentMinutes >= hours * 60 + mins) isFinished = true;
+        }
+        if (startTimeStr) {
+          const [sHours, sMins] = startTimeStr.split(':').map(Number);
+          if (currentMinutes < sHours * 60 + sMins) isStarted = false;
         }
       }
 
       if (state.currentFilter === 'finished') return isFinished;
       if (isFinished) return false; // If filtering by anything other than finished, hide finished people
+      if (!isStarted && (status === 'office' || status === 'remote')) return false;
       return status === state.currentFilter;
     });
   }
@@ -539,8 +552,7 @@ function updateGlobalStats() {
   let leave = 0;
   let finished = 0;
 
-  const now = new Date();
-  const currentMinutes = now.getHours() * 60 + now.getMinutes();
+  const currentMinutes = getEgyptTimeMinutes();
 
   state.employees.forEach(emp => {
     const record = todayData[emp.id];
@@ -563,6 +575,8 @@ function updateGlobalStats() {
       leave++;
     } else if (isFinished) {
       finished++;
+    } else if (!isStarted && (status === 'office' || status === 'remote')) {
+      // Do not count as office/remote until shift starts
     } else if (status === 'office') {
       office++;
     } else if (status === 'remote') {
@@ -918,27 +932,32 @@ function renderAnalytics(officeVal, remoteVal, leaveVal, finishedVal, totalVal) 
     const todayData = state.attendance[today] || {};
     officeCount = 0; remoteCount = 0; leaveCount = 0; finishedCount = 0;
 
-    const now = new Date();
-    const currentMinutes = now.getHours() * 60 + now.getMinutes();
+    const currentMinutes = getEgyptTimeMinutes();
 
     state.employees.forEach(emp => {
       const record = todayData[emp.id];
       const status = record ? record.status : getDefaultStatus(emp);
 
       let isFinished = false;
+      let isStarted = true;
       if (status !== 'leave') {
         const shiftText = getShiftString(record?.shift || emp.defaultShift);
-        const endTimeStr = shiftText.split('-')[1]?.trim();
+        const parts = shiftText.split('-');
+        const startTimeStr = parts[0]?.trim();
+        const endTimeStr = parts[1]?.trim();
         if (endTimeStr) {
           const [hours, mins] = endTimeStr.split(':').map(Number);
-          if (currentMinutes >= hours * 60 + mins) {
-            isFinished = true;
-          }
+          if (currentMinutes >= hours * 60 + mins) isFinished = true;
+        }
+        if (startTimeStr) {
+          const [sHours, sMins] = startTimeStr.split(':').map(Number);
+          if (currentMinutes < sHours * 60 + sMins) isStarted = false;
         }
       }
 
       if (status === 'leave') leaveCount++;
       else if (isFinished) finishedCount++;
+      else if (!isStarted && (status === 'office' || status === 'remote')) { /* skip */ }
       else if (status === 'office') officeCount++;
       else if (status === 'remote') remoteCount++;
     });
