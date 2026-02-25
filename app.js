@@ -294,6 +294,8 @@ function renderStatusCards() {
   const today = getDateKey(new Date());
   const todayData = state.attendance[today] || {};
 
+  const currentMinutes = typeof getEgyptTimeMinutes === 'function' ? getEgyptTimeMinutes() : 0;
+
   let officeCount = 0;
   let remoteCount = 0;
   let leaveCount = 0;
@@ -301,9 +303,24 @@ function renderStatusCards() {
   state.employees.forEach(emp => {
     const record = todayData[emp.id];
     const status = record ? record.status : getDefaultStatus(emp);
-    if (status === 'office') officeCount++;
+
+    let isStarted = true;
+    if (status !== 'leave' && typeof getEgyptTimeMinutes === 'function') {
+      const shiftText = getShiftString(record?.shift || getDefaultShift(emp));
+      const parts = shiftText.split('-');
+      const startTimeStr = parts[0]?.trim();
+      if (startTimeStr) {
+        const [sHours, sMins] = startTimeStr.split(':').map(Number);
+        if (currentMinutes < sHours * 60 + sMins) isStarted = false;
+      }
+    }
+
+    if (status === 'leave') leaveCount++;
+    else if (!isStarted && (status === 'office' || status === 'remote')) {
+      // Do not count as active office/remote until shift strictly begins
+    }
+    else if (status === 'office') officeCount++;
     else if (status === 'remote') remoteCount++;
-    else leaveCount++;
   });
 
   document.getElementById('totalCount').textContent = state.employees.length;
@@ -558,16 +575,21 @@ function updateGlobalStats() {
     const record = todayData[emp.id];
     let status = record ? record.status : getDefaultStatus(emp);
 
-    // Auto Finished check
+    // Auto Finished/Started check
     let isFinished = false;
+    let isStarted = true;
     if (status !== 'leave') {
       const shiftText = getShiftString(record?.shift || emp.defaultShift);
-      const endTimeStr = shiftText.split('-')[1]?.trim();
+      const parts = shiftText.split('-');
+      const startTimeStr = parts[0]?.trim();
+      const endTimeStr = parts[1]?.trim();
       if (endTimeStr) {
         const [hours, mins] = endTimeStr.split(':').map(Number);
-        if (currentMinutes >= hours * 60 + mins) {
-          isFinished = true;
-        }
+        if (currentMinutes >= hours * 60 + mins) isFinished = true;
+      }
+      if (startTimeStr) {
+        const [sHours, sMins] = startTimeStr.split(':').map(Number);
+        if (currentMinutes < sHours * 60 + sMins) isStarted = false;
       }
     }
 
