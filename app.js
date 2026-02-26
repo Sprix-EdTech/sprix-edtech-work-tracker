@@ -276,9 +276,8 @@ function updateRamadanDay() {
 
   if (diffDays >= 0 && diffDays < 30) {
     const d = diffDays + 1;
-    // Line 2: e.g. "7日", "Day 7"
-    if (currentLang === 'ja') dayEl.textContent = `${d}日`;
-    else dayEl.textContent = `${d}`; // EN/AR line 2 is just the number
+    // Line 2: Always display just the number, regardless of language
+    dayEl.textContent = `${d}`;
 
     // Line 3: e.g. "7 日目 / 30日", "Day 7 / 30 Days"
     if (currentLang === 'ja') dateEl.textContent = `${d} 日目 / 30日`;
