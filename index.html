@@ -16,7 +16,7 @@
     href="https://fonts.googleapis.com/css2?family=Almarai:wght@400;700;800&family=Cairo:wght@400;500;600;700&family=Tajawal:wght@400;500;700;800&display=swap"
     rel="stylesheet">
 
-  <link rel="stylesheet" href="style.css?v=20">
+  <link rel="stylesheet" href="style.css?v=25">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="https://unpkg.com/@phosphor-icons/web"></script>
 </head>
@@ -148,10 +148,11 @@
       </nav>
 
       <div class="sidebar-footer">
-        <div class="ramadan-info">
-          <div class="ramadan-label" data-i18n="ramadan.label">🌙 Ramadan Day</div>
-          <div class="ramadan-day" id="ramadanDay">6</div>
-          <div class="ramadan-day-label" id="ramadanDate"></div>
+        <div class="ramadan-info" id="ramadanInfoCard">
+          <i class="ph ph-moon-stars ramadan-icon"></i>
+          <div class="ramadan-label" data-i18n="ramadan.label">Ramadan Day</div>
+          <div class="ramadan-day" id="ramadanDay">0</div>
+          <div class="ramadan-day-label" id="ramadanDate">Loading...</div>
         </div>
       </div>
     </aside>

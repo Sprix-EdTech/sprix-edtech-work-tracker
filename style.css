@@ -235,29 +235,86 @@ body {
 }
 
 .ramadan-info {
-  background: rgba(241, 157, 187, 0.1);
-  border-radius: var(--radius-md);
-  padding: 14px;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.02));
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+  border-radius: var(--radius-lg);
+  padding: 18px 14px;
   text-align: center;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  cursor: default;
+}
+
+.ramadan-info:hover {
+  transform: translateY(-4px) scale(1.02);
+  box-shadow: 0 16px 48px rgba(255, 0, 153, 0.15);
+  border-color: rgba(255, 255, 255, 0.3);
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.05));
+}
+
+.ramadan-info:hover .ramadan-icon {
+  transform: scale(1.1) rotate(5deg);
+  filter: drop-shadow(0 4px 8px rgba(255, 0, 153, 0.4));
+}
+
+.ramadan-info .ramadan-icon {
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+/* Simulate glass top-light reflection */
+.ramadan-info::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.5), transparent);
+}
+
+.ramadan-info .ramadan-icon {
+  font-size: 28px;
+  color: var(--sprix-blossom);
+  background: linear-gradient(135deg, var(--white) 0%, var(--sprix-blossom) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 8px;
+  display: inline-block;
+  opacity: 0.95;
+  filter: drop-shadow(0 2px 4px rgba(255, 0, 153, 0.2));
 }
 
 .ramadan-info .ramadan-label {
-  font-size: calc(var(--text-scale, 1) * 11px);
+  font-size: calc(var(--text-scale, 1) * 10px);
   text-transform: uppercase;
-  letter-spacing: 1px;
-  color: var(--sprix-blossom);
+  letter-spacing: 2.5px;
+  color: rgba(255, 255, 255, 0.85);
   margin-bottom: 4px;
+  font-weight: 600;
 }
 
 .ramadan-info .ramadan-day {
-  font-size: calc(var(--text-scale, 1) * 28px);
-  font-weight: 700;
-  color: var(--white);
+  font-size: calc(var(--text-scale, 1) * 36px);
+  font-weight: 300;
+  letter-spacing: -1.5px;
+  line-height: 1.1;
+  background: linear-gradient(180deg, #ffffff 0%, #ffd1e3 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
 .ramadan-info .ramadan-day-label {
   font-size: calc(var(--text-scale, 1) * 11px);
-  color: rgba(255, 255, 255, 0.5);
+  color: rgba(255, 255, 255, 0.6);
+  font-weight: 400;
+  margin-top: 6px;
+  letter-spacing: 0.5px;
 }
 
 /* ---- Main Content Area ---- */
