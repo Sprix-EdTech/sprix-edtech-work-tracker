@@ -300,22 +300,6 @@ body {
   background: linear-gradient(135deg, rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.1));
 }
 
-.ramadan-info:hover .ramadan-icon {
-  animation: ramadan-float 2s infinite ease-in-out;
-  color: var(--sprix-blossom);
-  /* Subtle hint of brand color strictly on hover */
-  filter: drop-shadow(0 4px 12px rgba(255, 0, 153, 0.2));
-}
-
-.ramadan-info .ramadan-icon {
-  font-size: 32px;
-  color: var(--sprix-navy);
-  margin-bottom: 8px;
-  display: inline-block;
-  opacity: 0.9;
-  filter: drop-shadow(-1.5px 1.5px 0 var(--sprix-magenta)) drop-shadow(0 2px 4px rgba(27, 41, 75, 0.1));
-  transition: all 0.5s ease;
-}
 
 .ramadan-info .ramadan-label {
   font-size: calc(var(--text-scale, 1) * 11px);
@@ -332,7 +316,7 @@ body {
   letter-spacing: -1.5px;
   line-height: 1;
   color: var(--text-main);
-  text-shadow: -1.5px 1.5px 0 var(--sprix-magenta);
+  -webkit-text-stroke: 4px var(--sprix-magenta);
   filter: drop-shadow(2px 4px 8px rgba(27, 41, 75, 0.1));
 }
 
