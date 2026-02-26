@@ -234,88 +234,130 @@ body {
   border-top: 1px solid rgba(255, 255, 255, 0.08);
 }
 
+/* ---- Revolutionary Ramadan Card (Neon-Cyber Glass) ---- */
+@keyframes ramadan-pulse {
+  0% {
+    box-shadow: 0 0 20px rgba(0, 242, 254, 0.2);
+  }
+
+  50% {
+    box-shadow: 0 0 40px rgba(79, 172, 254, 0.4);
+  }
+
+  100% {
+    box-shadow: 0 0 20px rgba(0, 242, 254, 0.2);
+  }
+}
+
+@keyframes ramadan-float {
+  0% {
+    transform: translateY(0px) rotate(0deg);
+  }
+
+  50% {
+    transform: translateY(-3px) rotate(5deg);
+  }
+
+  100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+}
+
 .ramadan-info {
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.02));
-  backdrop-filter: blur(20px) saturate(180%);
-  -webkit-backdrop-filter: blur(20px) saturate(180%);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+  background: linear-gradient(135deg, rgba(15, 23, 42, 0.8), rgba(30, 41, 59, 0.9));
+  backdrop-filter: blur(24px) saturate(200%);
+  -webkit-backdrop-filter: blur(24px) saturate(200%);
+  border: 1px solid rgba(0, 242, 254, 0.3);
+  border-top: 1px solid rgba(0, 242, 254, 0.7);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
   border-radius: var(--radius-lg);
-  padding: 18px 14px;
+  padding: 24px 16px;
   text-align: center;
   position: relative;
   overflow: hidden;
-  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  cursor: default;
+  transition: all 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+  cursor: pointer;
+  animation: ramadan-pulse 4s infinite ease-in-out;
 }
 
-.ramadan-info:hover {
-  transform: translateY(-4px) scale(1.02);
-  box-shadow: 0 16px 48px rgba(212, 175, 55, 0.15);
-  border-color: rgba(255, 255, 255, 0.4);
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.18), rgba(255, 255, 255, 0.05));
-}
-
-.ramadan-info:hover .ramadan-icon {
-  transform: scale(1.1) rotate(5deg);
-  filter: drop-shadow(0 4px 10px rgba(212, 175, 55, 0.5));
-}
-
-.ramadan-info .ramadan-icon {
-  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-}
-
-/* Simulate glass top-light reflection */
+/* Cyber-Grid Reflection */
 .ramadan-info::before {
   content: '';
   position: absolute;
   top: 0;
-  left: 0;
+  left: -100%;
   right: 0;
-  height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.6), transparent);
+  height: 100%;
+  width: 50%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.15), transparent);
+  transform: skewX(-20deg);
+  transition: all 0.7s ease;
+}
+
+.ramadan-info:hover {
+  transform: translateY(-8px) scale(1.05);
+  border-color: rgba(0, 242, 254, 0.8);
+  box-shadow: 0 20px 60px rgba(0, 242, 254, 0.4), inset 0 0 20px rgba(79, 172, 254, 0.2);
+  background: linear-gradient(135deg, rgba(15, 23, 42, 0.9), rgba(0, 50, 100, 0.4));
+  animation: none;
+  /* Pause pulse on hover */
+}
+
+.ramadan-info:hover::before {
+  left: 200%;
+}
+
+.ramadan-info:hover .ramadan-icon {
+  animation: ramadan-float 1.5s infinite ease-in-out;
+  filter: drop-shadow(0 0 15px rgba(0, 242, 254, 1));
 }
 
 .ramadan-info .ramadan-icon {
-  font-size: 28px;
-  color: #D4AF37;
-  background: linear-gradient(135deg, #FFF6D3 0%, #D4AF37 100%);
+  font-size: 34px;
+  color: #00F2FE;
+  background: linear-gradient(135deg, #4FACFE 0%, #00F2FE 100%);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
-  margin-bottom: 8px;
+  margin-bottom: 12px;
   display: inline-block;
-  opacity: 0.95;
-  filter: drop-shadow(0 2px 4px rgba(212, 175, 55, 0.25));
+  opacity: 1;
+  filter: drop-shadow(0 4px 12px rgba(0, 242, 254, 0.5));
+  transition: all 0.4s ease;
 }
 
 .ramadan-info .ramadan-label {
-  font-size: calc(var(--text-scale, 1) * 10px);
+  font-size: calc(var(--text-scale, 1) * 12px);
   text-transform: uppercase;
-  letter-spacing: 2.5px;
-  color: rgba(255, 255, 255, 0.9);
-  margin-bottom: 4px;
-  font-weight: 600;
+  letter-spacing: 4px;
+  color: #4FACFE;
+  margin-bottom: 6px;
+  font-weight: 800;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
 }
 
 .ramadan-info .ramadan-day {
-  font-size: calc(var(--text-scale, 1) * 36px);
-  font-weight: 300;
-  letter-spacing: -1.5px;
-  line-height: 1.1;
-  background: linear-gradient(180deg, #FFFFFF 0%, #F0D582 100%);
+  font-size: calc(var(--text-scale, 1) * 48px);
+  font-weight: 900;
+  letter-spacing: -2px;
+  line-height: 1;
+  background: linear-gradient(180deg, #FFFFFF 0%, #00F2FE 100%);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 4px 16px rgba(0, 242, 254, 0.6));
 }
 
 .ramadan-info .ramadan-day-label {
-  font-size: calc(var(--text-scale, 1) * 11px);
-  color: rgba(255, 255, 255, 0.6);
-  font-weight: 400;
-  margin-top: 6px;
-  letter-spacing: 0.5px;
+  font-size: calc(var(--text-scale, 1) * 12px);
+  color: rgba(255, 255, 255, 0.8);
+  font-weight: 600;
+  margin-top: 10px;
+  letter-spacing: 1px;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 1);
 }
+
+
 
 /* ---- Main Content Area ---- */
 .main-content {
