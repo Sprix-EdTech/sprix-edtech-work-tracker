@@ -313,7 +313,7 @@ body {
   margin-bottom: 8px;
   display: inline-block;
   opacity: 0.9;
-  filter: drop-shadow(0 2px 4px rgba(27, 41, 75, 0.1));
+  filter: drop-shadow(-1.5px 1.5px 0 var(--sprix-magenta)) drop-shadow(0 2px 4px rgba(27, 41, 75, 0.1));
   transition: all 0.5s ease;
 }
 
@@ -332,6 +332,7 @@ body {
   letter-spacing: -1.5px;
   line-height: 1;
   color: var(--text-main);
+  text-shadow: -1.5px 1.5px 0 var(--sprix-magenta);
   filter: drop-shadow(2px 4px 8px rgba(27, 41, 75, 0.1));
 }
 
