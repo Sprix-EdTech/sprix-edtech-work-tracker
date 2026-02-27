@@ -141,203 +141,6 @@ body {
   overflow-x: hidden;
 }
 
-/* --- SPRIX EDTECH CUSTOM CSS TYPOGRAPHY --- */
-.sprix-edtech-logo {
-  display: inline-flex;
-  align-items: flex-end;
-  height: 20px;
-  gap: 3px;
-  padding-bottom: 2px;
-}
-
-/* Base properties for all letters */
-.sprix-edtech-logo span {
-  display: block;
-  position: relative;
-  box-sizing: border-box;
-  border-color: var(--sprix-navy);
-  border-style: solid;
-  border-width: 0;
-}
-
-/* Dark mode support */
-[data-theme="dark"] .sprix-edtech-logo span:not(.letter-T) {
-  border-color: #ffffff;
-}
-
-[data-theme="dark"] .sprix-edtech-logo span.letter-T {
-  border-color: var(--sprix-magenta) !important;
-}
-
-/* 'E' : Capital E */
-.sprix-edtech-logo .letter-E {
-  width: 14px;
-  height: 18px;
-  border-top-width: 2.5px;
-  border-bottom-width: 2.5px;
-  border-left-width: 2.5px;
-  border-radius: 1px 0 0 1px;
-}
-
-.sprix-edtech-logo .letter-E::after {
-  content: "";
-  position: absolute;
-  top: 5px;
-  left: 0;
-  width: 10px;
-  height: 2.5px;
-  background-color: currentColor;
-  color: var(--sprix-navy);
-}
-
-[data-theme="dark"] .sprix-edtech-logo .letter-E::after {
-  color: #ffffff;
-}
-
-/* 'd' : Lowercase d */
-.sprix-edtech-logo .letter-d {
-  width: 14px;
-  height: 18px;
-  margin-right: 2px;
-}
-
-.sprix-edtech-logo .letter-d::before {
-  /* The circle */
-  content: "";
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 13px;
-  height: 13px;
-  border: 2.5px solid currentColor;
-  border-radius: 50%;
-  color: var(--sprix-navy);
-  box-sizing: border-box;
-}
-
-.sprix-edtech-logo .letter-d::after {
-  /* The vertical stem */
-  content: "";
-  position: absolute;
-  bottom: 0;
-  right: 0;
-  width: 2.5px;
-  height: 18px;
-  background-color: currentColor;
-  color: var(--sprix-navy);
-  border-radius: 1px 1px 0 0;
-}
-
-[data-theme="dark"] .sprix-edtech-logo .letter-d::before,
-[data-theme="dark"] .sprix-edtech-logo .letter-d::after {
-  color: #ffffff;
-}
-
-/* 'T' : Capital T with Magenta Accent */
-.sprix-edtech-logo .letter-T {
-  width: 15px;
-  height: 18px;
-  border-top-width: 2.5px;
-  border-color: var(--sprix-magenta) !important;
-  border-radius: 1px 1px 0 0;
-}
-
-.sprix-edtech-logo .letter-T::after {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 2.5px;
-  height: 18px;
-  background-color: var(--sprix-magenta);
-  border-radius: 0 0 1px 1px;
-}
-
-/* 'e' : Lowercase e */
-.sprix-edtech-logo .letter-e {
-  width: 13px;
-  height: 13px;
-  border: 2.5px solid currentColor;
-  border-right-color: transparent;
-  border-radius: 50%;
-  color: var(--sprix-navy);
-  box-sizing: border-box;
-  transform: rotate(15deg);
-}
-
-.sprix-edtech-logo .letter-e::after {
-  content: "";
-  position: absolute;
-  top: 3px;
-  left: -2px;
-  width: 12px;
-  height: 2.5px;
-  background-color: currentColor;
-  transform: rotate(-15deg);
-  border-radius: 1px;
-}
-
-[data-theme="dark"] .sprix-edtech-logo .letter-e {
-  color: #ffffff;
-}
-
-/* 'c' : Lowercase c */
-.sprix-edtech-logo .letter-c {
-  width: 13px;
-  height: 13px;
-  border: 2.5px solid currentColor;
-  border-right-color: transparent;
-  border-radius: 50%;
-  color: var(--sprix-navy);
-  box-sizing: border-box;
-  transform: rotate(20deg);
-}
-
-[data-theme="dark"] .sprix-edtech-logo .letter-c {
-  color: #ffffff;
-}
-
-/* 'h' : Lowercase h */
-.sprix-edtech-logo .letter-h {
-  width: 13px;
-  height: 18px;
-  margin-left: 1px;
-}
-
-.sprix-edtech-logo .letter-h::before {
-  /* The vertical stem */
-  content: "";
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 2.5px;
-  height: 18px;
-  background-color: currentColor;
-  color: var(--sprix-navy);
-  border-radius: 1px 1px 0 0;
-}
-
-.sprix-edtech-logo .letter-h::after {
-  /* The arch */
-  content: "";
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 13px;
-  height: 13px;
-  border: 2.5px solid currentColor;
-  border-bottom: none;
-  border-left: none;
-  border-radius: 0 7px 0 0;
-  color: var(--sprix-navy);
-  box-sizing: border-box;
-}
-
-[data-theme="dark"] .sprix-edtech-logo .letter-h::before,
-[data-theme="dark"] .sprix-edtech-logo .letter-h::after {
-  color: #ffffff;
-}
 
 /* ---- Layout ---- */
 .app-layout {
@@ -2348,14 +2151,6 @@ html {
     overflow: visible !important;
   }
 
-  /* --- Application Layout Safety Net --- */
-  .app-layout,
-  body,
-  html {
-    overflow-x: hidden !important;
-    max-width: 100vw !important;
-  }
-
   /* --- Authentication Screen: Stop Collapsing --- */
   .auth-card {
     width: 95% !important;
@@ -2391,6 +2186,9 @@ html {
     align-items: center !important;
     gap: 4px !important;
     text-align: center;
+    position: relative !important;
+    z-index: 20 !important;
+    pointer-events: auto !important;
   }
 
   .dashboard-stats .status-card .status-icon {
@@ -2440,6 +2238,15 @@ html {
   /* --- Employee Cards: Compact Mobile Layout --- */
   .employee-card {
     padding: 14px !important;
+    position: relative !important;
+    z-index: 20 !important;
+    pointer-events: auto !important;
+  }
+
+  .employee-card .status-btn {
+    position: relative !important;
+    z-index: 30 !important;
+    pointer-events: auto !important;
   }
 
   .emp-header {
