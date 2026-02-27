@@ -486,6 +486,8 @@ body {
   display: flex;
   align-items: center;
   gap: 12px;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
   transition:
     transform var(--transition-base),
     box-shadow var(--transition-base),
@@ -594,6 +596,8 @@ body {
     background var(--transition-base);
   position: relative;
   overflow: hidden;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
 }
 
