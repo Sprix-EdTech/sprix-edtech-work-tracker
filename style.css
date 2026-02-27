@@ -2062,10 +2062,12 @@ html {
     transform: translateX(-100%) !important;
     transition: transform 0.3s ease !important;
     overflow-y: auto !important;
+    pointer-events: none !important;
   }
 
   .sidebar.open {
     transform: translateX(0) !important;
+    pointer-events: auto !important;
   }
 
   /* RTL sidebar slides from right */
@@ -2077,6 +2079,7 @@ html {
 
   [dir="rtl"] .sidebar.open {
     transform: translateX(0) !important;
+    pointer-events: auto !important;
   }
 
   /* --- Hamburger Menu Toggle: Visible --- */
