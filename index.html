@@ -16,7 +16,7 @@
     href="https://fonts.googleapis.com/css2?family=Almarai:wght@400;700;800&family=Cairo:wght@400;500;600;700&family=Tajawal:wght@400;500;700;800&family=Montserrat:wght@700;800;900&display=swap"
     rel="stylesheet">
 
-  <link rel="stylesheet" href="style.css?v=48">
+  <link rel="stylesheet" href="style.css?v=49">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="https://unpkg.com/@phosphor-icons/web"></script>
 </head>
@@ -149,6 +149,18 @@
       </nav>
 
       <div class="sidebar-footer">
+        <!-- Dual Timezone Clock -->
+        <div class="dual-clock-container" id="dualClockContainer">
+          <div class="clock-row">
+            <span class="clock-label">🇯🇵 JPN</span>
+            <span class="clock-time" id="timeJpn">--:--</span>
+          </div>
+          <div class="clock-row">
+            <span class="clock-label">🇪🇬 EGY</span>
+            <span class="clock-time" id="timeEgy">--:--</span>
+          </div>
+        </div>
+
         <div class="qureo-mascot"></div>
         <div class="ramadan-info" id="ramadanInfoCard">
           <i class="ph ph-moon-stars ramadan-icon"></i>

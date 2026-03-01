@@ -279,6 +279,54 @@ body {
   }
 }
 
+/* ---- Dual Timezone Clock ---- */
+.dual-clock-container {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 24px;
+  padding: 12px 16px;
+  background: rgba(255, 255, 255, 0.4);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: var(--radius-md);
+}
+
+[data-theme="dark"] .dual-clock-container {
+  background: rgba(30, 41, 59, 0.6);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+.clock-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.clock-label {
+  font-size: calc(var(--text-scale, 1) * 11px);
+  font-weight: 700;
+  color: var(--sprix-gray);
+  letter-spacing: 0.5px;
+}
+
+[data-theme="dark"] .clock-label {
+  color: #94a3b8;
+}
+
+.clock-time {
+  font-family: 'Poppins', 'Montserrat', monospace;
+  font-size: calc(var(--text-scale, 1) * 14px);
+  font-weight: 600;
+  color: var(--sprix-navy);
+  letter-spacing: 1px;
+}
+
+[data-theme="dark"] .clock-time {
+  color: #ffffff;
+}
+
 .ramadan-info {
   background: linear-gradient(135deg, rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0.05));
   backdrop-filter: blur(24px) saturate(180%);

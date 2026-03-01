@@ -21,9 +21,57 @@ function getCurrentEgyptDateKey() {
    SPRIX Ramadan Work Tracker — Application
    ========================================== */
 
-// ---- Ramadan 2026 dates (approximate: Feb 18 – Mar 19, 2026) ----
+// === Ramadan Date Logic ===
 const RAMADAN_START = new Date(2026, 1, 18); // Feb 18, 2026
 const RAMADAN_END = new Date(2026, 2, 19);   // Mar 19, 2026
+
+// === Dual Timezone Clock Logic ===
+function updateClocks() {
+  const now = new Date();
+
+  // Format options for HH:MM:SS
+  const timeOptions = { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false };
+
+  // Japan Time (Asia/Tokyo)
+  const timeJpn = new Intl.DateTimeFormat('en-GB', { ...timeOptions, timeZone: 'Asia/Tokyo' }).format(now);
+  document.getElementById('timeJpn').textContent = timeJpn;
+
+  // Egypt Time (Africa/Cairo)
+  const timeEgy = new Intl.DateTimeFormat('en-GB', { ...timeOptions, timeZone: 'Africa/Cairo' }).format(now);
+  document.getElementById('timeEgy').textContent = timeEgy;
+}
+
+function startClocks() {
+  updateClocks(); // Initial call
+  setInterval(updateClocks, 1000);
+}
+
+function renderRamadanDay() {
+  const egyNow = new Date(new Date().toLocaleString("en-US", { timeZone: "Africa/Cairo" }));
+  const today = egyNow.setHours(0, 0, 0, 0);
+  const start = RAMADAN_START.setHours(0, 0, 0, 0);
+  const end = RAMADAN_END.setHours(0, 0, 0, 0);
+
+  const ramadanDayEl = document.getElementById('ramadanDay');
+  const ramadanDateEl = document.getElementById('ramadanDate');
+  const dtf = new Intl.DateTimeFormat('en-US', { timeZone: 'Africa/Cairo', year: 'numeric', month: '2-digit', day: '2-digit' });
+  const parts = dtf.formatToParts(new Date());
+
+  const formattedDate = `${parts.find(p => p.type === 'month').value}/${parts.find(p => p.type === 'day').value}`;
+
+  if (today < start) {
+    ramadanDayEl.textContent = '-';
+    ramadanDateEl.textContent = 'Upcoming';
+  } else if (today > end) {
+    ramadanDayEl.textContent = 'Eid';
+    ramadanDateEl.textContent = 'Mubarak';
+  } else {
+    const diffTime = Math.abs(today - start);
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1;
+    ramadanDayEl.textContent = diffDays;
+    ramadanDateEl.textContent = formattedDate;
+  }
+}
 
 // ---- Day names (for calendar headers) ----
 const MONTH_NAMES = {
@@ -75,6 +123,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const themeSelect = document.getElementById('themeSelect');
   if (themeSelect) themeSelect.value = state.theme;
+
+  // Start Timezone Clocks
+  startClocks();
 
   // Initial stats check
   setTimeout(updateGlobalStats, 100);
