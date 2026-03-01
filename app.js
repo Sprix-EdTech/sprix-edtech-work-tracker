@@ -30,16 +30,16 @@ function updateClocks() {
   const now = new Date();
 
   const timeOptions = { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false };
-  const dateOptions = { month: '2-digit', day: '2-digit' };
+  const dateOptions = { month: 'short', day: 'numeric' };
 
   // Japan Time (Asia/Tokyo)
-  const timeJpn = new Intl.DateTimeFormat('en-GB', { ...timeOptions, timeZone: 'Asia/Tokyo' }).format(now);
+  const timeJpn = new Intl.DateTimeFormat('en-US', { ...timeOptions, timeZone: 'Asia/Tokyo' }).format(now);
   const dateJpn = new Intl.DateTimeFormat('en-US', { ...dateOptions, timeZone: 'Asia/Tokyo' }).format(now);
   document.getElementById('timeJpn').textContent = timeJpn;
   document.getElementById('dateJpn').textContent = dateJpn;
 
   // Egypt Time (Africa/Cairo)
-  const timeEgy = new Intl.DateTimeFormat('en-GB', { ...timeOptions, timeZone: 'Africa/Cairo' }).format(now);
+  const timeEgy = new Intl.DateTimeFormat('en-US', { ...timeOptions, timeZone: 'Africa/Cairo' }).format(now);
   const dateEgy = new Intl.DateTimeFormat('en-US', { ...dateOptions, timeZone: 'Africa/Cairo' }).format(now);
   document.getElementById('timeEgy').textContent = timeEgy;
   document.getElementById('dateEgy').textContent = dateEgy;
