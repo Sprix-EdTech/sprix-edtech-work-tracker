@@ -16,7 +16,7 @@
     href="https://fonts.googleapis.com/css2?family=Almarai:wght@400;700;800&family=Cairo:wght@400;500;600;700&family=Tajawal:wght@400;500;700;800&family=Montserrat:wght@700;800;900&display=swap"
     rel="stylesheet">
 
-  <link rel="stylesheet" href="style.css?v=51">
+  <link rel="stylesheet" href="style.css?v=52">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="https://unpkg.com/@phosphor-icons/web"></script>
 </head>
@@ -157,17 +157,35 @@
           <div class="ramadan-day-label" id="ramadanDate">Loading...</div>
         </div>
 
-        <!-- Dual Timezone Clock -->
-        <div class="dual-clock-container" id="dualClockContainer" style="margin-top: 16px; margin-bottom: 0;">
-          <div class="clock-row">
-            <span class="clock-label">🇯🇵 JPN <span id="dateJpn"
-                style="font-weight: 500; margin-left: 4px;">--/--</span></span>
-            <span class="clock-time" id="timeJpn">--:--</span>
+        <!-- Dual Timezone Analog Clocks -->
+        <div class="analog-clocks-container" id="dualClockContainer">
+          <div class="analog-clock-wrapper">
+            <div class="analog-clock" id="clockJpn">
+              <div class="clock-face">
+                <div class="hand hour-hand" id="hourJpn"></div>
+                <div class="hand minute-hand" id="minJpn"></div>
+                <div class="hand second-hand" id="secJpn"></div>
+                <div class="clock-center"></div>
+              </div>
+            </div>
+            <div class="clock-info">
+              <span class="clock-city">Tokyo</span>
+              <span class="clock-date" id="dateJpn"></span>
+            </div>
           </div>
-          <div class="clock-row">
-            <span class="clock-label">🇪🇬 EGY <span id="dateEgy"
-                style="font-weight: 500; margin-left: 4px;">--/--</span></span>
-            <span class="clock-time" id="timeEgy">--:--</span>
+          <div class="analog-clock-wrapper">
+            <div class="analog-clock" id="clockEgy">
+              <div class="clock-face">
+                <div class="hand hour-hand" id="hourEgy"></div>
+                <div class="hand minute-hand" id="minEgy"></div>
+                <div class="hand second-hand" id="secEgy"></div>
+                <div class="clock-center"></div>
+              </div>
+            </div>
+            <div class="clock-info">
+              <span class="clock-city">Cairo</span>
+              <span class="clock-date" id="dateEgy"></span>
+            </div>
           </div>
         </div>
       </div>

@@ -28,21 +28,50 @@ const RAMADAN_END = new Date(2026, 2, 19);   // Mar 19, 2026
 // === Dual Timezone Clock Logic ===
 function updateClocks() {
   const now = new Date();
-
-  const timeOptions = { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false };
   const dateOptions = { month: 'short', day: 'numeric' };
 
+  const getParts = (tz) => {
+    const dtf = new Intl.DateTimeFormat('en-US', { timeZone: tz, hour: 'numeric', minute: 'numeric', second: 'numeric', hourCycle: 'h23' });
+    const parts = dtf.formatToParts(now);
+    return {
+      h: parseInt(parts.find(p => p.type === 'hour').value, 10),
+      m: parseInt(parts.find(p => p.type === 'minute').value, 10),
+      s: parseInt(parts.find(p => p.type === 'second').value, 10)
+    };
+  };
+
   // Japan Time (Asia/Tokyo)
-  const timeJpn = new Intl.DateTimeFormat('en-US', { ...timeOptions, timeZone: 'Asia/Tokyo' }).format(now);
-  const dateJpn = new Intl.DateTimeFormat('en-US', { ...dateOptions, timeZone: 'Asia/Tokyo' }).format(now);
-  document.getElementById('timeJpn').textContent = timeJpn;
-  document.getElementById('dateJpn').textContent = dateJpn;
+  const jpn = getParts('Asia/Tokyo');
+  document.getElementById('dateJpn').textContent = new Intl.DateTimeFormat('en-US', { ...dateOptions, timeZone: 'Asia/Tokyo' }).format(now);
+  setAnalogClock('Jpn', jpn.h, jpn.m, jpn.s);
 
   // Egypt Time (Africa/Cairo)
-  const timeEgy = new Intl.DateTimeFormat('en-US', { ...timeOptions, timeZone: 'Africa/Cairo' }).format(now);
-  const dateEgy = new Intl.DateTimeFormat('en-US', { ...dateOptions, timeZone: 'Africa/Cairo' }).format(now);
-  document.getElementById('timeEgy').textContent = timeEgy;
-  document.getElementById('dateEgy').textContent = dateEgy;
+  const egy = getParts('Africa/Cairo');
+  document.getElementById('dateEgy').textContent = new Intl.DateTimeFormat('en-US', { ...dateOptions, timeZone: 'Africa/Cairo' }).format(now);
+  setAnalogClock('Egy', egy.h, egy.m, egy.s);
+}
+
+function setAnalogClock(idSuffix, h, m, s) {
+  const hourDeg = (h % 12) * 30 + (m / 60) * 30;
+  const minDeg = m * 6 + (s / 60) * 6;
+  const secDeg = s * 6;
+
+  const hourEl = document.getElementById(`hour${idSuffix}`);
+  const minEl = document.getElementById(`min${idSuffix}`);
+  const secEl = document.getElementById(`sec${idSuffix}`);
+  const clockEl = document.getElementById(`clock${idSuffix}`);
+
+  if (hourEl) hourEl.style.transform = `rotate(${hourDeg}deg)`;
+  if (minEl) minEl.style.transform = `rotate(${minDeg}deg)`;
+  if (secEl) secEl.style.transform = `rotate(${secDeg}deg)`;
+
+  if (clockEl) {
+    if (h >= 6 && h < 18) {
+      clockEl.classList.remove('night');
+    } else {
+      clockEl.classList.add('night');
+    }
+  }
 }
 
 function startClocks() {
