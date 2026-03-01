@@ -283,9 +283,9 @@ body {
 .analog-clocks-container {
   display: flex;
   justify-content: space-around;
-  margin-top: 16px;
+  margin-top: 12px;
   margin-bottom: 0;
-  padding: 16px 8px;
+  padding: 12px 4px;
   background: rgba(255, 255, 255, 0.4);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
@@ -306,8 +306,8 @@ body {
 }
 
 .analog-clock {
-  width: 72px;
-  height: 72px;
+  width: 56px;
+  height: 56px;
   border-radius: 50%;
   position: relative;
   background: #ffffff;
@@ -343,19 +343,19 @@ body {
 
 .hour-hand {
   width: 4px;
-  height: 20px;
+  height: 14px;
   margin-left: -2px;
 }
 
 .minute-hand {
   width: 2px;
-  height: 28px;
+  height: 20px;
   margin-left: -1px;
 }
 
 .second-hand {
   width: 2px;
-  height: 32px;
+  height: 24px;
   margin-left: -1px;
   background: #ff3b30 !important;
 }
@@ -380,7 +380,7 @@ body {
 }
 
 .clock-city {
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 700;
   color: var(--sprix-navy);
 }
@@ -407,7 +407,7 @@ body {
   box-shadow: 0 8px 32px rgba(27, 41, 75, 0.08);
   /* Sprix Navy soft shadow */
   border-radius: var(--radius-lg);
-  padding: 20px 14px;
+  padding: 16px 12px;
   text-align: center;
   position: relative;
   overflow: hidden;
@@ -422,10 +422,10 @@ body {
 
 .qureo-mascot {
   position: absolute;
-  top: -65px;
+  top: -60px;
   right: -5px;
-  width: 140px;
-  height: 140px;
+  width: 130px;
+  height: 130px;
   background-image: url('qureo-clean.png');
   background-size: contain;
   background-position: center bottom;
@@ -499,7 +499,7 @@ body {
 }
 
 .ramadan-info .ramadan-day {
-  font-size: calc(var(--text-scale, 1) * 44px);
+  font-size: calc(var(--text-scale, 1) * 36px);
   font-weight: 800;
   letter-spacing: -1.5px;
   line-height: 1;
