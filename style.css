@@ -191,6 +191,7 @@ body {
 .sidebar-logo {
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 10px;
   margin-bottom: 4px;
 }
@@ -216,6 +217,8 @@ body {
   color: rgba(255, 255, 255, 0.5);
   letter-spacing: 0.5px;
   margin-top: 2px;
+  text-align: center;
+  width: 100%;
 }
 
 .sidebar-nav {
@@ -1909,25 +1912,19 @@ html[dir="rtl"] {
   font-family: var(--font-arabic) !important;
 }
 
-html[dir="rtl"] {
-  font-size: 110% !important;
-  line-height: 1.8 !important;
-  zoom: 1.15 !important;
-}
+
 
 html[dir="rtl"] body {
   letter-spacing: 0.3px !important;
 }
 
 html[dir="rtl"] .emp-name {
-  font-size: calc(var(--text-scale, 1) * 20px);
   font-weight: 700 !important;
   line-height: 1.4 !important;
   margin-bottom: 8px !important;
 }
 
 html[dir="rtl"] .status-card h3 {
-  font-size: calc(var(--text-scale, 1) * 32px);
   font-weight: 800 !important;
 }
 
