@@ -1599,9 +1599,11 @@ body.dark-mode .header {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 5px 12px;
+  width: 30px;
+  height: 30px;
+  padding: 0;
   border: 1.5px solid var(--gray-200);
-  border-radius: var(--radius-full);
+  border-radius: 50%;
   background: var(--gray-100);
   font-size: calc(var(--text-scale, 1) * 11px);
   font-weight: 700;
