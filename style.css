@@ -63,28 +63,17 @@
 }
 
 body.dark-mode {
-  --white: #071533;
-  /* Deep glass card backgrounds */
-  --gray-50: #02091c;
-  /* Main application lowest background layer */
-  --gray-100: #051433;
-  /* Base elevated surfaces */
-  --gray-200: #0a204d;
-  /* Borders / structural elements */
-  --gray-300: #163678;
-  /* UI component borders */
-  --gray-400: #2d559c;
-  /* Muted active icons */
-  --gray-500: #578bd6;
-  /* Subtitles / secondary text */
-  --gray-600: #8aaeee;
-  /* Secondary highly visible text */
-  --gray-700: #bad0f5;
-  /* Main text softer variant */
-  --gray-800: #ebf3ff;
-  /* High contrast primary body text */
+  --white: #1e2235;
+  --gray-50: #0f1117;
+  --gray-100: #1a1d2e;
+  --gray-200: rgba(255, 255, 255, 0.06);
+  --gray-300: rgba(255, 255, 255, 0.12);
+  --gray-400: #5c6378;
+  --gray-500: #8b92a5;
+  --gray-600: #a0a6b8;
+  --gray-700: #d1d5db;
+  --gray-800: #f0f2f5;
   --gray-900: #ffffff;
-  /* Pure white headings */
 
   --shadow-sm: 0 4px 12px rgba(0, 0, 0, 0.4);
   --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.5);
@@ -92,20 +81,21 @@ body.dark-mode {
   --shadow-xl: 0 24px 64px rgba(0, 0, 0, 0.7);
 
   --status-office: #4b8df8;
-  /* Brightened for dark mode pop */
-  --status-remote: #ff4db8;
-  /* Boosted magenta for dark mode pop */
+  --status-remote: #6366f1;
   --status-leave: #8aaeee;
   --status-finished: #578bd6;
   --status-office-bg: rgba(75, 141, 248, 0.15);
-  --status-remote-bg: rgba(255, 77, 184, 0.15);
+  --status-remote-bg: rgba(99, 102, 241, 0.15);
   --status-leave-bg: rgba(138, 174, 238, 0.1);
   --status-finished-bg: rgba(87, 139, 214, 0.1);
 
-  --sprix-navy: #7eacff;
-  /* Inverse brighter navy for text legibility */
+  --sprix-navy: #818cf8;
   --success: #10b981;
   --warning: #f59e0b;
+
+  background-image:
+    radial-gradient(ellipse at 20% 0%, rgba(99, 102, 241, 0.08) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 100%, rgba(139, 92, 246, 0.06) 0%, transparent 50%);
 }
 
 /* ---- Reset & Base ---- */
@@ -1942,10 +1932,10 @@ html[dir="rtl"] .status-card h3 {
 }
 
 [data-theme="dark"] {
-  --glass-bg: rgba(30, 41, 59, 0.55);
-  --glass-border: 1px solid rgba(255, 255, 255, 0.1);
+  --glass-bg: rgba(30, 34, 53, 0.7);
+  --glass-border: 1px solid rgba(255, 255, 255, 0.06);
   --glass-blur: blur(28px) saturate(200%);
-  --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  --glass-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
 }
 
 /* Apply Liquid Glass to Core Components */
