@@ -466,6 +466,27 @@ function getDefaultShift(emp) {
   return emp.defaultShift || 'opt1';
 }
 
+// Parse end hour from a shift string like "9:00 - 17:00" → 17
+function getShiftEndHour(shiftValue) {
+  let shiftStr = '';
+  if (shiftValue === 'opt1') {
+    shiftStr = state.workMode === 'normal' ? '9:00 - 17:00' : '9:00 - 15:00';
+  } else if (shiftValue === 'opt2') {
+    shiftStr = state.workMode === 'normal' ? '10:00 - 18:00' : '10:00 - 16:00';
+  } else {
+    shiftStr = shiftValue || '9:00 - 17:00';
+  }
+  const match = shiftStr.match(/-\s*(\d{1,2})/);
+  return match ? parseInt(match[1]) : 18; // default end at 18
+}
+
+// Check if current Egypt time is past the employee's shift end hour
+function isAfterShiftEnd(shiftValue) {
+  const endHour = getShiftEndHour(shiftValue);
+  const egyNow = new Date(new Date().toLocaleString("en-US", { timeZone: "Africa/Cairo" }));
+  return egyNow.getHours() >= endHour;
+}
+
 function renderDashboard() {
   const grid = document.getElementById('employeeGrid');
 
@@ -542,12 +563,16 @@ function renderDashboard() {
     const shift = record ? record.shift : getDefaultShift(emp);
     const initials = getInitials(emp.name);
 
+    // After shift hours, show "Home" (inactive) instead of Office/Remote
+    const afterHours = (status === 'office' || status === 'remote') && isAfterShiftEnd(shift);
+    const displayStatus = afterHours ? 'home' : status;
+
     const shiftText = shift === 'opt1'
       ? t(state.workMode === 'normal' ? 'shift.normal1' : 'shift.ramadan1')
       : shift === 'opt2'
         ? t(state.workMode === 'normal' ? 'shift.normal2' : 'shift.ramadan2')
         : escapeHTML(shift);
-    const isLeave = status === 'leave';
+    const isLeave = status === 'leave' || displayStatus === 'home';
 
     let shiftButtonsHtml = ``;
 
@@ -568,7 +593,7 @@ function renderDashboard() {
 
 
     return `
-      <div class="employee-card ${status}" data-emp-id="${emp.id}">
+      <div class="employee-card ${displayStatus}" data-emp-id="${emp.id}">
         <div class="employee-card-header">
           <div class="employee-info">
             <div class="employee-avatar">${initials}</div>
@@ -577,8 +602,8 @@ function renderDashboard() {
               <div class="employee-dept">${escapeHTML(emp.department || '')}</div>
             </div>
           </div>
-          <span class="status-badge ${status}">
-            ${t('badge.' + status)}
+          <span class="status-badge ${displayStatus}">
+            ${t('badge.' + displayStatus)}
           </span>
         </div>
 

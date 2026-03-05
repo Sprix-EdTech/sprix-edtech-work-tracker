@@ -146,6 +146,11 @@ const TRANSLATIONS = {
         en: 'Leave',
         ar: 'إجازة',
     },
+    'badge.home': {
+        ja: 'Home',
+        en: 'Home',
+        ar: 'في المنزل',
+    },
     'btn.finished': {
         ja: '退勤',
         en: 'End of Shift',

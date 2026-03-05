@@ -808,6 +808,19 @@ body.dark-mode .header {
   background: var(--gray-400);
 }
 
+/* After-hours / Home (inactive) — same visual as Leave */
+.employee-card.home::before {
+  background: var(--gray-400);
+}
+
+.employee-card.home .employee-avatar {
+  background: var(--gray-400);
+}
+
+.employee-card.home {
+  opacity: 0.7;
+}
+
 .employee-name {
   font-size: calc(var(--text-scale, 1) * 16px);
   font-weight: 600;
@@ -844,6 +857,11 @@ body.dark-mode .header {
 .status-badge.leave {
   background: var(--status-leave-bg);
   color: var(--status-leave);
+}
+
+.status-badge.home {
+  background: var(--status-leave-bg);
+  color: var(--gray-400);
 }
 
 .employee-details {
