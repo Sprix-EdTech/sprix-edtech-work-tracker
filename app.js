@@ -827,7 +827,7 @@ function closeModal() {
   setTimeout(() => {
     overlay.classList.remove('active', 'closing');
     state.editingEmployee = null;
-  }, 300);
+  }, 350);
 }
 
 function saveEmployee() {
