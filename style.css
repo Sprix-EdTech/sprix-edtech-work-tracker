@@ -22,9 +22,12 @@
   --status-office: #043586;
   --status-remote: #ff0099;
   --status-leave: #94a3b8;
+  --status-overtime: #e85d04;
+  /* fiery orange */
   --status-office-bg: rgba(4, 53, 134, 0.08);
   --status-remote-bg: rgba(255, 0, 153, 0.08);
   --status-leave-bg: rgba(148, 163, 184, 0.08);
+  --status-overtime-bg: rgba(232, 93, 4, 0.08);
   --status-finished: #475569;
   --status-finished-bg: rgba(71, 85, 105, 0.08);
 
@@ -90,10 +93,12 @@ body.dark-mode {
   --status-office: #4b8df8;
   --status-remote: #6366f1;
   --status-leave: #8aaeee;
+  --status-overtime: #fb8500;
   --status-finished: #578bd6;
   --status-office-bg: rgba(75, 141, 248, 0.15);
   --status-remote-bg: rgba(99, 102, 241, 0.15);
   --status-leave-bg: rgba(138, 174, 238, 0.1);
+  --status-overtime-bg: rgba(251, 133, 0, 0.15);
   --status-finished-bg: rgba(87, 139, 214, 0.1);
 
   --sprix-navy: #818cf8;
@@ -809,6 +814,14 @@ body.dark-mode .header {
   background: var(--gray-400);
 }
 
+.employee-card.overtime::before {
+  background: var(--status-overtime);
+}
+
+.employee-card.overtime .employee-avatar {
+  background: var(--status-overtime);
+}
+
 /* After-hours / Home (inactive) — same visual as Leave */
 .employee-card.home::before {
   background: var(--gray-400);
@@ -863,6 +876,12 @@ body.dark-mode .header {
 .status-badge.home {
   background: var(--status-leave-bg);
   color: var(--gray-400);
+}
+
+.status-badge.overtime {
+  background: var(--status-overtime-bg);
+  color: var(--status-overtime);
+  font-weight: 700;
 }
 
 .employee-details {
@@ -961,6 +980,12 @@ body.dark-mode .header {
   background: var(--status-leave-bg) !important;
   border-color: var(--status-leave) !important;
   color: var(--status-leave) !important;
+}
+
+.status-btn.active.overtime-btn {
+  background: var(--status-overtime-bg) !important;
+  border-color: var(--status-overtime) !important;
+  color: var(--status-overtime) !important;
 }
 
 /* ---- Buttons ---- */

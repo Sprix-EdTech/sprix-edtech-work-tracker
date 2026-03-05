@@ -151,6 +151,16 @@ const TRANSLATIONS = {
         en: 'Home',
         ar: 'في المنزل',
     },
+    'badge.overtime': {
+        ja: '残業',
+        en: 'Overtime',
+        ar: 'وقت إضافي',
+    },
+    'btn.overtime': {
+        ja: '残業',
+        en: 'Overtime',
+        ar: 'وقت إضافي',
+    },
     'btn.finished': {
         ja: '退勤',
         en: 'End of Shift',

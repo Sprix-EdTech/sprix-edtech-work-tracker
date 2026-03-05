@@ -624,6 +624,10 @@ function renderDashboard() {
                   onclick="setStatus('${emp.id}', 'remote')">🏠 <span data-i18n="btn.remote">${t('btn.remote')}</span></button>
           <button class="status-btn leave-btn ${status === 'leave' ? 'active' : ''}"
                   onclick="setStatus('${emp.id}', 'leave')">🌙 <span data-i18n="btn.leave">${t('btn.leave')}</span></button>
+          ${(displayStatus === 'home' || status === 'overtime') ? `
+          <button class="status-btn overtime-btn ${status === 'overtime' ? 'active' : ''}"
+                  onclick="setStatus('${emp.id}', 'overtime')">🔥 <span data-i18n="btn.overtime">${t('btn.overtime')}</span></button>
+          ` : ''}
         </div>
 
         <div class="shift-selector">
