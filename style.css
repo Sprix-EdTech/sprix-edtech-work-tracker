@@ -1902,7 +1902,7 @@ body.text-xlarge {
 
 /* Arabic Typography Revolution */
 :root {
-  --font-arabic: "Tajawal", "Almarai", "Cairo", sans-serif !important;
+  --font-arabic: "Aref Ruqaa Ink", "Tajawal", "Almarai", "Cairo", sans-serif !important;
 }
 
 html[dir="rtl"],
@@ -1910,6 +1910,7 @@ html[dir="rtl"] body,
 html[dir="rtl"] .app-container,
 html[dir="rtl"] {
   font-family: var(--font-arabic) !important;
+  font-weight: 700 !important;
 }
 
 
