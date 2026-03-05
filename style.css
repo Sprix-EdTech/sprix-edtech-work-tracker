@@ -1769,13 +1769,10 @@ body.dark-mode .header {
    ========================================== */
 [dir="rtl"] {
   font-family: var(--font-arabic);
-  font-size: 110%;
-  line-height: 1.8;
-  zoom: 1.15;
+  /* No zoom, font-size, or line-height overrides — keeps Arabic at same scale as EN/JA */
 }
 
 [dir="rtl"] .emp-name {
-  font-size: calc(var(--text-scale, 1) * 22px);
   font-weight: 700;
   margin-bottom: 8px;
 }
