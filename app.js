@@ -1568,3 +1568,154 @@ function initSecurity() {
 if (sessionStorage.getItem('sprix-auth') !== 'true') {
   document.getElementById('authOverlay')?.classList.remove('hidden');
 }
+
+// ═══════════════════════════════════════════
+//  HIJRI (ISLAMIC) CALENDAR MODULE
+// ═══════════════════════════════════════════
+
+let hijriMonthOffset = 0; // 0 = current month
+
+const HIJRI_MONTH_NAMES = {
+  en: ['Muharram', 'Safar', 'Rabi al-Awwal', 'Rabi al-Thani', 'Jumada al-Ula', 'Jumada al-Thani', 'Rajab', 'Sha\'ban', 'Ramadan', 'Shawwal', 'Dhu al-Qi\'dah', 'Dhu al-Hijjah'],
+  ja: ['ムハッラム', 'サファル', 'ラビーウル・アウワル', 'ラビーウッ・サーニー', 'ジュマーダル・ウーラー', 'ジュマーダッ・サーニー', 'ラジャブ', 'シャアバーン', 'ラマダーン', 'シャウワール', 'ズルカアダ', 'ズルヒッジャ'],
+  ar: ['محرم', 'صفر', 'ربيع الأول', 'ربيع الآخر', 'جمادى الأولى', 'جمادى الآخرة', 'رجب', 'شعبان', 'رمضان', 'شوال', 'ذو القعدة', 'ذو الحجة']
+};
+
+const HIJRI_WEEKDAY_NAMES = {
+  en: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
+  ja: ['日', '月', '火', '水', '木', '金', '土'],
+  ar: ['أحد', 'إثن', 'ثلا', 'أرب', 'خمي', 'جمع', 'سبت']
+};
+
+function getHijriDateInfo(date) {
+  // Get Hijri date parts using Intl API
+  const dtf = new Intl.DateTimeFormat('en-US-u-ca-islamic-umalqura', {
+    day: 'numeric', month: 'numeric', year: 'numeric', timeZone: 'Africa/Cairo'
+  });
+  const parts = dtf.formatToParts(date);
+  return {
+    day: parseInt(parts.find(p => p.type === 'day').value),
+    month: parseInt(parts.find(p => p.type === 'month').value),
+    year: parseInt(parts.find(p => p.type === 'year').value)
+  };
+}
+
+function getGregorianFromHijri(hYear, hMonth, hDay) {
+  // Brute-force search: iterate Gregorian dates to find matching Hijri date
+  // Start from a reasonable base and search forward
+  const baseDate = new Date(2024, 6, 1); // Rough start for Hijri ~1446
+  for (let i = 0; i < 1200; i++) {
+    const d = new Date(baseDate.getTime() + i * 86400000);
+    const hi = getHijriDateInfo(d);
+    if (hi.year === hYear && hi.month === hMonth && hi.day === hDay) {
+      return d;
+    }
+  }
+  return null;
+}
+
+function renderHijriCalendar() {
+  const now = new Date(new Date().toLocaleString("en-US", { timeZone: "Africa/Cairo" }));
+  const todayHijri = getHijriDateInfo(now);
+
+  // Calculate target month/year with offset
+  let targetMonth = todayHijri.month + hijriMonthOffset;
+  let targetYear = todayHijri.year;
+  while (targetMonth > 12) { targetMonth -= 12; targetYear++; }
+  while (targetMonth < 1) { targetMonth += 12; targetYear--; }
+
+  const lang = currentLang || 'en';
+
+  // Render month title
+  const monthName = HIJRI_MONTH_NAMES[lang]?.[targetMonth - 1] || HIJRI_MONTH_NAMES.en[targetMonth - 1];
+  const yearStr = targetYear.toLocaleString(lang === 'ar' ? 'ar-SA' : 'en-US', { useGrouping: false });
+  document.getElementById('hijriMonthTitle').textContent = `${monthName} ${yearStr}`;
+
+  // Render weekday headers
+  const weekdays = HIJRI_WEEKDAY_NAMES[lang] || HIJRI_WEEKDAY_NAMES.en;
+  document.getElementById('hijriWeekdays').innerHTML = weekdays
+    .map(d => `<div class="hijri-weekday">${d}</div>`).join('');
+
+  // Find the first day of this Hijri month in Gregorian
+  const firstDayGreg = getGregorianFromHijri(targetYear, targetMonth, 1);
+  if (!firstDayGreg) {
+    document.getElementById('hijriDaysGrid').innerHTML = '<div style="grid-column:1/-1;text-align:center;color:var(--gray-400);padding:20px;">Calendar data unavailable</div>';
+    return;
+  }
+
+  // Determine how many days in this month (scan forward until month changes)
+  let daysInMonth = 29;
+  for (let d = 29; d <= 30; d++) {
+    const testDate = new Date(firstDayGreg.getTime() + (d) * 86400000);
+    const hi = getHijriDateInfo(testDate);
+    if (hi.month === targetMonth && hi.year === targetYear) {
+      daysInMonth = d + 1;
+    } else {
+      break;
+    }
+  }
+
+  // Get the day of week the first falls on (0=Sun)
+  const firstDow = firstDayGreg.getDay();
+
+  // Build grid
+  let html = '';
+  // Empty cells before first day
+  for (let i = 0; i < firstDow; i++) {
+    html += '<div class="hijri-day empty"></div>';
+  }
+
+  const isRamadan = (targetMonth === 9);
+
+  for (let d = 1; d <= daysInMonth; d++) {
+    const gregDate = new Date(firstDayGreg.getTime() + (d - 1) * 86400000);
+    const dow = gregDate.getDay();
+    const isToday = (todayHijri.day === d && todayHijri.month === targetMonth && todayHijri.year === targetYear);
+    const isFriday = (dow === 5);
+
+    let cls = 'hijri-day';
+    if (isToday) cls += ' today';
+    else if (isRamadan) cls += ' ramadan-day';
+    else if (isFriday) cls += ' friday';
+
+    html += `<div class="${cls}">${d}</div>`;
+  }
+
+  document.getElementById('hijriDaysGrid').innerHTML = html;
+
+  // Footer: show Gregorian date range
+  const lastDayGreg = new Date(firstDayGreg.getTime() + (daysInMonth - 1) * 86400000);
+  const fmtOpts = { month: 'short', day: 'numeric', year: 'numeric' };
+  const footerText = `${firstDayGreg.toLocaleDateString('en-US', fmtOpts)} — ${lastDayGreg.toLocaleDateString('en-US', fmtOpts)}`;
+  document.getElementById('hijriFooter').textContent = footerText;
+}
+
+function openHijriCalendar() {
+  hijriMonthOffset = 0;
+  renderHijriCalendar();
+  const overlay = document.getElementById('hijriCalendarOverlay');
+  overlay.classList.add('active');
+}
+
+function closeHijriCalendar() {
+  const overlay = document.getElementById('hijriCalendarOverlay');
+  overlay.classList.add('closing');
+  setTimeout(() => {
+    overlay.classList.remove('active', 'closing');
+  }, 350);
+}
+
+function navigateHijriMonth(dir) {
+  hijriMonthOffset += dir;
+  renderHijriCalendar();
+}
+
+// Close on backdrop click
+document.addEventListener('DOMContentLoaded', () => {
+  const hijriOverlay = document.getElementById('hijriCalendarOverlay');
+  if (hijriOverlay) {
+    hijriOverlay.addEventListener('click', (e) => {
+      if (e.target === hijriOverlay) closeHijriCalendar();
+    });
+  }
+});
