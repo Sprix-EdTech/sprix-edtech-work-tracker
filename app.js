@@ -820,8 +820,14 @@ function openModal(employee = null) {
 }
 
 function closeModal() {
-  document.getElementById('modalOverlay').classList.remove('active');
-  state.editingEmployee = null;
+  const overlay = document.getElementById('modalOverlay');
+  // Trigger the closing animation
+  overlay.classList.add('closing');
+  // After the animation completes, fully hide the modal
+  setTimeout(() => {
+    overlay.classList.remove('active', 'closing');
+    state.editingEmployee = null;
+  }, 300);
 }
 
 function saveEmployee() {
