@@ -147,6 +147,8 @@ document.addEventListener('DOMContentLoaded', () => {
   // Apply saved language & theme
   setLanguage(currentLang);
   document.body.classList.toggle('dark-mode', state.theme === 'dark');
+  // Remove the pre-paint dark class (applied synchronously in <head> to avoid flash)
+  document.documentElement.classList.remove('dark-pre');
   applyTextSize();
 
   // Update modes
