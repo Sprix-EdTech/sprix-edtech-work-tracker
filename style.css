@@ -1594,6 +1594,44 @@ body.dark-mode .header {
   box-shadow: var(--shadow-sm);
 }
 
+/* Standalone font size toggle — separate from lang switcher */
+.font-size-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 5px 12px;
+  border: 1.5px solid var(--gray-200);
+  border-radius: var(--radius-full);
+  background: var(--gray-100);
+  font-size: calc(var(--text-scale, 1) * 11px);
+  font-weight: 700;
+  color: var(--gray-500);
+  cursor: pointer;
+  font-family: "Poppins", sans-serif;
+  transition: all var(--transition-fast);
+  white-space: nowrap;
+  line-height: 1;
+}
+
+.font-size-toggle:hover {
+  background: var(--white);
+  color: var(--sprix-navy);
+  border-color: var(--sprix-navy);
+  box-shadow: var(--shadow-sm);
+}
+
+body.dark-mode .font-size-toggle {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.12);
+  color: var(--gray-400);
+}
+
+body.dark-mode .font-size-toggle:hover {
+  background: rgba(255, 255, 255, 0.15);
+  color: #f0f2f5;
+  border-color: rgba(255, 255, 255, 0.25);
+}
+
 /* ---- Calendar Legend ---- */
 .calendar-legend {
   margin-top: 16px;
