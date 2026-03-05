@@ -1892,7 +1892,7 @@ body.text-xlarge {
 
 /* Arabic Typography Revolution */
 :root {
-  --font-arabic: "Aref Ruqaa Ink", "Tajawal", "Almarai", "Cairo", sans-serif !important;
+  --font-arabic: "Cairo Play", "Tajawal", "Almarai", "Cairo", sans-serif !important;
 }
 
 html[dir="rtl"],
