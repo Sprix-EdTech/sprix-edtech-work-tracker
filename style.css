@@ -566,6 +566,12 @@ body.dark-mode .clock-date {
   z-index: 50;
 }
 
+body.dark-mode .header {
+  background: rgba(15, 17, 23, 0.85) !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05) !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4) !important;
+}
+
 .header-left {
   display: flex;
   align-items: center;
@@ -1904,26 +1910,32 @@ body.text-xlarge {
 
 html[dir="rtl"],
 html[dir="rtl"] body,
-html[dir="rtl"] .app-container,
-html[dir="rtl"] {
+html[dir="rtl"] .app-container {
   font-family: var(--font-arabic) !important;
-  font-weight: 700 !important;
 }
-
-
 
 html[dir="rtl"] body {
   letter-spacing: 0.3px !important;
 }
 
-html[dir="rtl"] .emp-name {
+/* Bold only on titles/headings/labels, not body text — prevents layout inflation */
+html[dir="rtl"] h1,
+html[dir="rtl"] h2,
+html[dir="rtl"] h3,
+html[dir="rtl"] h4,
+html[dir="rtl"] .nav-item,
+html[dir="rtl"] .sidebar-subtitle,
+html[dir="rtl"] .section-title,
+html[dir="rtl"] .header-title,
+html[dir="rtl"] .status-badge,
+html[dir="rtl"] .emp-name,
+html[dir="rtl"] .status-card h3 {
   font-weight: 700 !important;
-  line-height: 1.4 !important;
-  margin-bottom: 8px !important;
 }
 
-html[dir="rtl"] .status-card h3 {
-  font-weight: 800 !important;
+html[dir="rtl"] .emp-name {
+  line-height: 1.4 !important;
+  margin-bottom: 8px !important;
 }
 
 /* =========================================
