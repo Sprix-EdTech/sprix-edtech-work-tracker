@@ -15,9 +15,9 @@ const TRANSLATIONS = {
         ar: 'التقويم',
     },
     'nav.employees': {
-        ja: '従業員管理',
-        en: 'Employees',
-        ar: 'إدارة الموظفين',
+        ja: 'チームメンバー',
+        en: 'Our Team',
+        ar: 'فريقنا',
     },
     'nav.export': {
         ja: 'エクスポート',
@@ -71,9 +71,9 @@ const TRANSLATIONS = {
 
     // ---- Status Cards ----
     'status.total': {
-        ja: '総従業員数',
-        en: 'Total Employees',
-        ar: 'إجمالي الموظفين',
+        ja: '総チームメンバー数',
+        en: 'Total Team Members',
+        ar: 'إجمالي أعضاء الفريق',
     },
     'status.inOffice': {
         ja: 'オフィス勤務',
@@ -98,9 +98,9 @@ const TRANSLATIONS = {
         ar: 'حضور اليوم',
     },
     'dashboard.addEmployee': {
-        ja: '従業員追加',
-        en: 'Add Employee',
-        ar: 'إضافة موظف',
+        ja: 'メンバー追加',
+        en: 'Add Team Member',
+        ar: 'إضافة عضو',
     },
     'dashboard.add': {
         ja: '追加',
@@ -154,19 +154,19 @@ const TRANSLATIONS = {
 
     // ---- Employee Card / Table ----
     'emp.emptyTitle': {
-        ja: '従業員が登録されていません',
-        en: 'No employees registered',
-        ar: 'لا يوجد موظفون مسجلون',
+        ja: 'チームメンバーが登録されていません',
+        en: 'No team members registered',
+        ar: 'لا يوجد أعضاء مسجلين',
     },
     'emp.emptyAction': {
-        ja: '「従業員追加」ボタンで追加してください',
-        en: 'Click "Add Employee" to get started',
-        ar: 'انقر "إضافة موظف" للبدء',
+        ja: '「メンバー追加」ボタンで追加してください',
+        en: 'Click "Add Team Member" to get started',
+        ar: 'انقر "إضافة عضو" للبدء',
     },
     'emp.addFirst': {
-        ja: '＋ 最初の従業員を追加',
-        en: '＋ Add First Employee',
-        ar: '＋ أضف أول موظف',
+        ja: '＋ 最初のメンバーを追加',
+        en: '＋ Add First Team Member',
+        ar: '＋ أضف أول عضو',
     },
 
     // ---- Employee Table Headers ----
@@ -196,21 +196,21 @@ const TRANSLATIONS = {
         ar: 'الإجراءات',
     },
     'table.listTitle': {
-        ja: '従業員一覧',
-        en: 'Employee List',
-        ar: 'قائمة الموظفين',
+        ja: 'メンバー一覧',
+        en: 'Team Member List',
+        ar: 'قائمة أعضاء الفريق',
     },
 
     // ---- Modal ----
     'modal.addTitle': {
-        ja: '従業員を追加',
-        en: 'Add Employee',
-        ar: 'إضافة موظف',
+        ja: 'メンバーを追加',
+        en: 'Add Team Member',
+        ar: 'إضافة عضو',
     },
     'modal.editTitle': {
-        ja: '従業員を編集',
-        en: 'Edit Employee',
-        ar: 'تعديل موظف',
+        ja: 'メンバーを編集',
+        en: 'Edit Team Member',
+        ar: 'تعديل عضو',
     },
     'modal.name': {
         ja: '名前 (Name)',
@@ -401,9 +401,9 @@ const TRANSLATIONS = {
 
     // ---- Confirm ----
     'confirm.delete': {
-        ja: 'を削除しますか？',
-        en: 'Delete this employee?',
-        ar: 'هل تريد حذف هذا الموظف؟',
+        ja: 'をチームから削除しますか？',
+        en: 'Delete this team member?',
+        ar: 'هل تريد حذف هذا العضو؟',
     },
 
     // ---- Settings ----
