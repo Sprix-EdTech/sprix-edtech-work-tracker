@@ -2395,7 +2395,7 @@ body.dark-mode .dashboard-stats {
 
 body.dark-mode .sidebar {
   background: linear-gradient(180deg, rgba(15, 17, 23, 0.85) 0%, rgba(26, 29, 46, 0.95) 100%) !important;
-  color: var(--white) !important;
+  color: #ffffff !important;
   border-right: 1px solid rgba(255, 255, 255, 0.05) !important;
 }
 
@@ -2404,7 +2404,7 @@ body.dark-mode .sidebar-nav .nav-item {
 }
 
 body.dark-mode .sidebar-nav .nav-item.active {
-  color: var(--white) !important;
+  color: #ffffff !important;
   background: rgba(255, 255, 255, 0.1) !important;
 }
 
