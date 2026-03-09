@@ -1616,12 +1616,17 @@ const HIJRI_WEEKDAY_NAMES = {
   ar: ['أحد', 'إثن', 'ثلا', 'أرب', 'خمي', 'جمع', 'سبت']
 };
 
+const HIJRI_DAY_OFFSET = -1; // -1 day offset to align Umm al-Qura astronomical calculation with local moon sighting
+
 function getHijriDateInfo(date) {
+  // Apply the manual offset (e.g., -1 day)
+  const adjustedDate = new Date(date.getTime() + (HIJRI_DAY_OFFSET * 24 * 60 * 60 * 1000));
+
   // Get Hijri date parts using Intl API
   const dtf = new Intl.DateTimeFormat('en-US-u-ca-islamic-umalqura', {
     day: 'numeric', month: 'numeric', year: 'numeric', timeZone: 'Africa/Cairo'
   });
-  const parts = dtf.formatToParts(date);
+  const parts = dtf.formatToParts(adjustedDate);
   return {
     day: parseInt(parts.find(p => p.type === 'day').value),
     month: parseInt(parts.find(p => p.type === 'month').value),
