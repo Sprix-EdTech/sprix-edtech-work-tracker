@@ -22,8 +22,8 @@ function getCurrentEgyptDateKey() {
    ========================================== */
 
 // === Ramadan Date Logic ===
-const RAMADAN_START = new Date(2026, 1, 18); // Feb 18, 2026
-const RAMADAN_END = new Date(2026, 2, 19);   // Mar 19, 2026
+const RAMADAN_START = new Date(2026, 1, 19); // Feb 19, 2026
+const RAMADAN_END = new Date(2026, 2, 20);   // Mar 20, 2026
 
 // === Dual Timezone Clock Logic ===
 function updateClocks() {
