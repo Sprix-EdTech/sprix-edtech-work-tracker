@@ -93,12 +93,32 @@ function renderRamadanDay() {
   const formattedDate = `${parts.find(p => p.type === 'month').value}/${parts.find(p => p.type === 'day').value}`;
 
   if (today < start) {
+    const labelEl = document.querySelector('.ramadan-label');
+    if (labelEl) {
+      labelEl.dataset.i18n = 'ramadan.label';
+      labelEl.textContent = t('ramadan.label');
+    }
     ramadanDayEl.textContent = '-';
     ramadanDateEl.textContent = 'Upcoming';
   } else if (today > end) {
-    ramadanDayEl.textContent = 'Eid';
-    ramadanDateEl.textContent = 'Mubarak';
+    const hijri = getHijriDateInfo(egyNow);
+    const lang = currentLang || 'en';
+    const mName = HIJRI_MONTH_NAMES[lang]?.[hijri.month - 1] || HIJRI_MONTH_NAMES.en[hijri.month - 1];
+    
+    const labelEl = document.querySelector('.ramadan-label');
+    if (labelEl) {
+      labelEl.dataset.i18n = 'hijri.label';
+      labelEl.textContent = t('hijri.label');
+    }
+    
+    ramadanDayEl.textContent = hijri.day;
+    ramadanDateEl.textContent = mName;
   } else {
+    const labelEl = document.querySelector('.ramadan-label');
+    if (labelEl) {
+      labelEl.dataset.i18n = 'ramadan.label';
+      labelEl.textContent = t('ramadan.label');
+    }
     const diffTime = Math.abs(today - start);
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1;
     ramadanDayEl.textContent = diffDays;
