@@ -53,6 +53,11 @@ const TRANSLATIONS = {
         en: 'Ramadan',
         ar: 'رمضان',
     },
+    'hijri.label': {
+        ja: 'イスラム暦',
+        en: 'Hijri Date',
+        ar: 'التاريخ الهجري',
+    },
     'ramadan.dayOf': {
         ja: '日目 / 30日',
         en: 'of 30',
