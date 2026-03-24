@@ -181,6 +181,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Start Timezone Clocks
   startClocks();
+  
+  // Render Sidebar Hijri/Ramadan Card
+  renderRamadanDay();
+  setInterval(renderRamadanDay, 60000);
 
   // Initial stats check
   setTimeout(updateGlobalStats, 100);

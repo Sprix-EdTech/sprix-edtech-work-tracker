@@ -633,7 +633,7 @@ function updateAllText() {
 
     // Update header date
     if (typeof updateHeader === 'function') updateHeader();
-    if (typeof updateRamadanDay === 'function') updateRamadanDay();
+    if (typeof renderRamadanDay === 'function') renderRamadanDay();
 
     // Re-render dynamic content
     if (typeof render === 'function') render();
