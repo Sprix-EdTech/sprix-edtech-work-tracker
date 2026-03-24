@@ -599,6 +599,29 @@ function t(key) {
 }
 
 function setLanguage(lang) {
+    const isCurrentlyRtl = document.documentElement.dir === 'rtl';
+    const willBeRtl = lang === 'ar';
+    const appLayout = document.querySelector('.app-layout');
+    
+    if (isCurrentlyRtl !== willBeRtl && appLayout) {
+        // Trigger flip animation when crossing LTR/RTL boundary
+        appLayout.classList.add('flip-animating');
+        
+        setTimeout(() => {
+            // Swap DOM direction and text strictly at the 90-degree invisible mark
+            applyLanguageSettings(lang);
+        }, 300);
+        
+        setTimeout(() => {
+            appLayout.classList.remove('flip-animating');
+        }, 600);
+    } else {
+        // Instant switch for EN <-> JA or missing layout wrapper
+        applyLanguageSettings(lang);
+    }
+}
+
+function applyLanguageSettings(lang) {
     currentLang = lang;
     localStorage.setItem('sprix-lang', lang);
 
