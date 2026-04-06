@@ -137,6 +137,7 @@ const MONTH_NAMES = {
 let state = {
   employees: [],
   attendance: {}, // { 'YYYY-MM-DD': { empId: { status, shift } } }
+  acknowledgedAlerts: {}, // { 'YYYY-MM-DD': { empId: { absent: true, late: true } } }
   currentView: 'dashboard',
   calendarMonth: new Date().getMonth(),
   calendarYear: new Date().getFullYear(),
@@ -199,6 +200,7 @@ function loadState() {
       const parsed = JSON.parse(saved);
       state.employees = parsed.employees || [];
       state.attendance = parsed.attendance || {};
+      state.acknowledgedAlerts = parsed.acknowledgedAlerts || {};
       state.workMode = parsed.workMode || 'normal';
       state.theme = parsed.theme || 'light';
       state.textSize = parsed.textSize || 'normal';
@@ -233,6 +235,7 @@ function saveState() {
     localStorage.setItem('sprix-ramadan-tracker', JSON.stringify({
       employees: state.employees,
       attendance: state.attendance,
+      acknowledgedAlerts: state.acknowledgedAlerts,
       workMode: state.workMode,
       theme: state.theme,
       textSize: state.textSize,
@@ -339,6 +342,7 @@ function switchView(viewName) {
   if (viewName === 'calendar') renderCalendar();
   if (viewName === 'employees') renderEmployeeTable();
   if (viewName === 'analytics') renderAnalytics();
+  if (viewName === 'notifications') renderNotifications();
 
   updateGlobalStats();
   render();
@@ -402,11 +406,158 @@ function updateRamadanDay() {
     dateEl.textContent = t('ramadan.completed');
   }
 }
+// ---- Alert Detection System ----
+function detectAlerts() {
+  const today = getCurrentEgyptDateKey();
+  const todayData = state.attendance[today] || {};
+  const currentMinutes = typeof getEgyptTimeMinutes === 'function' ? getEgyptTimeMinutes() : 0;
+  const alerts = []; // { empId, type: 'absent'|'late', emp }
+
+  // Determine if today is a weekend (Fri=5, Sat=6 for Egypt)
+  const egyNow = new Date(new Date().toLocaleString("en-US", { timeZone: "Africa/Cairo" }));
+  const dayOfWeek = egyNow.getDay();
+  const isWeekend = (dayOfWeek === 5 || dayOfWeek === 6);
+
+  if (isWeekend) return alerts; // No alerts on weekends
+
+  state.employees.forEach(emp => {
+    const record = todayData[emp.id];
+    const defaultStatus = getDefaultStatus(emp);
+
+    // --- ABSENT detection ---
+    // Employee has no manual record AND their default status is 'leave' (but it's not a weekend)
+    // OR the manager explicitly set them to 'leave'
+    // We flag it unless it's a default-remote day or default-office day
+    if (!record && defaultStatus === 'leave') {
+      // This shouldn't happen on weekdays since getDefaultStatus returns 'office'/'remote' for weekdays
+      // So skip — weekdays default to office/remote
+    } else if (record && record.status === 'leave') {
+      // Manager explicitly set leave — treat as flagged absence
+      alerts.push({ empId: emp.id, type: 'absent', emp });
+    }
+
+    // --- LATE detection ---
+    // No manual record yet, AND it's past (shift start + 15min) but before shift end
+    if (!record || (!record.status)) {
+      const shiftValue = getDefaultShift(emp);
+      const shiftStr = getShiftString(shiftValue);
+      if (typeof shiftStr === 'string') {
+        const parts = shiftStr.split('-');
+        const startTimeStr = parts[0]?.trim();
+        const endTimeStr = parts[1]?.trim();
+
+        if (startTimeStr && endTimeStr) {
+          const [sH, sM] = startTimeStr.split(':').map(Number);
+          const [eH, eM] = endTimeStr.split(':').map(Number);
+          const startMin = sH * 60 + sM;
+          const endMin = eH * 60 + eM;
+
+          // Late = 15 min past start AND before shift end
+          if (!isNaN(startMin) && !isNaN(endMin) && currentMinutes >= startMin + 15 && currentMinutes < endMin) {
+            alerts.push({ empId: emp.id, type: 'late', emp });
+          }
+        }
+      }
+    }
+  });
+
+  return alerts;
+}
+
+function isAlertAcknowledged(empId, type) {
+  const today = getCurrentEgyptDateKey();
+  return state.acknowledgedAlerts[today]?.[empId]?.[type] === true;
+}
+
+function acknowledgeAlert(empId, type) {
+  const today = getCurrentEgyptDateKey();
+  if (!state.acknowledgedAlerts[today]) state.acknowledgedAlerts[today] = {};
+  if (!state.acknowledgedAlerts[today][empId]) state.acknowledgedAlerts[today][empId] = {};
+  state.acknowledgedAlerts[today][empId][type] = true;
+  saveState();
+  render();
+  updateNotifyBadge();
+  if (state.currentView === 'notifications') renderNotifications();
+}
+
+function updateNotifyBadge() {
+  const alerts = detectAlerts();
+  const unacked = alerts.filter(a => !isAlertAcknowledged(a.empId, a.type));
+  const badge = document.getElementById('navNotifyBadge');
+  if (badge) {
+    if (unacked.length > 0) {
+      badge.textContent = unacked.length;
+      badge.style.display = 'inline-flex';
+    } else {
+      badge.style.display = 'none';
+    }
+  }
+
+  // Update dashboard stat cards
+  const absentCount = alerts.filter(a => a.type === 'absent').length;
+  const lateCount = alerts.filter(a => a.type === 'late').length;
+  const ga = document.getElementById('globalAbsent');
+  if (ga) ga.textContent = absentCount;
+  const glate = document.getElementById('globalLate');
+  if (glate) glate.textContent = lateCount;
+}
+
+function renderNotifications() {
+  const container = document.getElementById('notificationsContainer');
+  if (!container) return;
+
+  const alerts = detectAlerts();
+
+  if (alerts.length === 0) {
+    container.innerHTML = `
+      <div class="notify-empty-state">
+        <div class="empty-icon">✅</div>
+        <p>${t('notify.empty')}</p>
+        <div class="sub">${t('notify.allClear')}</div>
+      </div>`;
+    return;
+  }
+
+  // Sort: unacknowledged first, then by type (absent > late)
+  alerts.sort((a, b) => {
+    const aAcked = isAlertAcknowledged(a.empId, a.type) ? 1 : 0;
+    const bAcked = isAlertAcknowledged(b.empId, b.type) ? 1 : 0;
+    if (aAcked !== bAcked) return aAcked - bAcked;
+    if (a.type === 'absent' && b.type === 'late') return -1;
+    if (a.type === 'late' && b.type === 'absent') return 1;
+    return 0;
+  });
+
+  container.innerHTML = alerts.map(alert => {
+    const acked = isAlertAcknowledged(alert.empId, alert.type);
+    const icon = alert.type === 'absent' ? '🚨' : '⏰';
+    const initials = getInitials(alert.emp.name);
+    const desc = alert.type === 'absent' ? t('alert.absentDesc') : t('alert.lateDesc');
+    const typeBadge = alert.type === 'absent' ? t('alert.absent') : t('alert.late');
+
+    return `
+      <div class="notification-card type-${alert.type} ${acked ? 'is-acked' : ''}">
+        <div class="notification-icon ${alert.type}">${icon}</div>
+        <div class="notification-body">
+          <div class="notify-name">${escapeHTML(alert.emp.name)}</div>
+          <div class="notify-dept">${escapeHTML(alert.emp.department || '')} ・ <span class="card-alert-badge ${alert.type}" style="display:inline;padding:2px 8px;margin:0;">${typeBadge}</span></div>
+          <div class="notify-desc">${desc}</div>
+        </div>
+        <div class="notification-actions">
+          ${acked
+            ? `<button class="card-ack-btn acked" disabled>${t('alert.acknowledged')}</button>`
+            : `<button class="card-ack-btn" onclick="acknowledgeAlert('${alert.empId}', '${alert.type}')">${t('alert.acknowledge')}</button>`
+          }
+        </div>
+      </div>`;
+  }).join('');
+}
 
 // ---- Render ----
 function render() {
   renderStatusCards();
   renderDashboard();
+  updateNotifyBadge();
 }
 
 function renderStatusCards() {
@@ -615,9 +766,36 @@ function renderDashboard() {
       }
     }
 
+    // Alert detection for this card
+    const alerts = detectAlerts();
+    const empAlert = alerts.find(a => a.empId === emp.id);
+    const alertClass = empAlert ? (empAlert.type === 'absent' ? 'alert-absent' : 'alert-late') : '';
+    const alertAcked = empAlert ? isAlertAcknowledged(emp.id, empAlert.type) : false;
+
+    let alertHtml = '';
+    if (empAlert && !alertAcked) {
+      const alertIcon = empAlert.type === 'absent' ? '🚨' : '⏰';
+      const alertLabel = empAlert.type === 'absent' ? t('alert.absent') : t('alert.late');
+      const alertDesc = empAlert.type === 'absent' ? t('alert.absentDesc') : t('alert.lateDesc');
+      alertHtml = `
+        <div class="card-alert-row">
+          <div>
+            <span class="card-alert-badge ${empAlert.type}">${alertIcon} ${alertLabel}</span>
+            <div class="card-alert-desc">${alertDesc}</div>
+          </div>
+          <button class="card-ack-btn" onclick="event.stopPropagation(); acknowledgeAlert('${emp.id}', '${empAlert.type}')">${t('alert.acknowledge')}</button>
+        </div>`;
+    } else if (empAlert && alertAcked) {
+      alertHtml = `
+        <div class="card-alert-row">
+          <span class="card-alert-badge ${empAlert.type}" style="opacity:0.5;">${empAlert.type === 'absent' ? '🚨' : '⏰'} ${empAlert.type === 'absent' ? t('alert.absent') : t('alert.late')}</span>
+          <button class="card-ack-btn acked" disabled>${t('alert.acknowledged')}</button>
+        </div>`;
+    }
+
 
     return `
-      <div class="employee-card ${displayStatus}" data-emp-id="${emp.id}">
+      <div class="employee-card ${displayStatus} ${alertAcked ? '' : alertClass}" data-emp-id="${emp.id}">
         <div class="employee-card-header">
           <div class="employee-info">
             <div class="employee-avatar">${initials}</div>
@@ -657,6 +835,7 @@ function renderDashboard() {
         <div class="shift-selector">
 ${shiftButtonsHtml}
         </div>
+        ${alertHtml}
       </div>
     `;
   }).join('');

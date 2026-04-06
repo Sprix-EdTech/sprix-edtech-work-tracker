@@ -2931,3 +2931,284 @@ body.dark-mode .ramadan-info .ramadan-day-label {
     padding: 6px 8px !important;
   }
 }
+
+/* ═══════════════════════════════════════════
+   NOTIFICATION / ALERT SYSTEM
+   ═══════════════════════════════════════════ */
+
+/* --- Sidebar Nav Badge (unread count) --- */
+.nav-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 6px;
+  border-radius: 10px;
+  background: #ef4444;
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  margin-left: auto;
+  animation: badgePulse 2s ease-in-out infinite;
+}
+
+@keyframes badgePulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.15); }
+}
+
+/* --- Employee Card Alert Highlights --- */
+.employee-card.alert-absent {
+  border: 2px solid #ef4444 !important;
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.15), var(--shadow-md) !important;
+  animation: alertGlowRed 2.5s ease-in-out infinite;
+}
+
+.employee-card.alert-absent::before {
+  background: #ef4444 !important;
+}
+
+.employee-card.alert-late {
+  border: 2px solid #f59e0b !important;
+  box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.15), var(--shadow-md) !important;
+  animation: alertGlowOrange 2.5s ease-in-out infinite;
+}
+
+.employee-card.alert-late::before {
+  background: #f59e0b !important;
+}
+
+@keyframes alertGlowRed {
+  0%, 100% { box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1), var(--shadow-md); }
+  50% { box-shadow: 0 0 0 6px rgba(239, 68, 68, 0.25), var(--shadow-lg); }
+}
+
+@keyframes alertGlowOrange {
+  0%, 100% { box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.1), var(--shadow-md); }
+  50% { box-shadow: 0 0 0 6px rgba(245, 158, 11, 0.25), var(--shadow-lg); }
+}
+
+/* --- Alert Badge on Card --- */
+.card-alert-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-size: calc(var(--text-scale, 1) * 11px);
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  margin-top: 8px;
+}
+
+.card-alert-badge.absent {
+  background: rgba(239, 68, 68, 0.12);
+  color: #ef4444;
+  border: 1px solid rgba(239, 68, 68, 0.25);
+}
+
+.card-alert-badge.late {
+  background: rgba(245, 158, 11, 0.12);
+  color: #d97706;
+  border: 1px solid rgba(245, 158, 11, 0.25);
+}
+
+.card-alert-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid var(--gray-200);
+}
+
+.card-alert-desc {
+  font-size: calc(var(--text-scale, 1) * 11px);
+  color: var(--gray-500);
+}
+
+.card-ack-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 12px;
+  border: 1px solid var(--gray-300);
+  border-radius: 8px;
+  background: transparent;
+  font-size: calc(var(--text-scale, 1) * 11px);
+  font-weight: 600;
+  color: var(--gray-600);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.card-ack-btn:hover {
+  background: var(--gray-100);
+  border-color: var(--gray-400);
+}
+
+.card-ack-btn.acked {
+  background: rgba(16, 185, 129, 0.1);
+  border-color: rgba(16, 185, 129, 0.3);
+  color: #10b981;
+  cursor: default;
+}
+
+/* --- Notifications View --- */
+.notifications-container {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.notification-card {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 16px 20px;
+  border-radius: var(--radius-md);
+  background: var(--white);
+  border: 1px solid var(--gray-200);
+  box-shadow: var(--shadow-sm);
+  transition: all 0.2s;
+}
+
+.notification-card:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+}
+
+.notification-card.type-absent {
+  border-left: 4px solid #ef4444;
+}
+
+.notification-card.type-late {
+  border-left: 4px solid #f59e0b;
+}
+
+.notification-card.is-acked {
+  opacity: 0.5;
+  filter: grayscale(0.3);
+}
+
+.notification-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  flex-shrink: 0;
+}
+
+.notification-icon.absent {
+  background: rgba(239, 68, 68, 0.1);
+}
+
+.notification-icon.late {
+  background: rgba(245, 158, 11, 0.1);
+}
+
+.notification-body {
+  flex: 1;
+  min-width: 0;
+}
+
+.notification-body .notify-name {
+  font-weight: 600;
+  font-size: calc(var(--text-scale, 1) * 15px);
+  color: var(--gray-800);
+}
+
+.notification-body .notify-dept {
+  font-size: calc(var(--text-scale, 1) * 12px);
+  color: var(--gray-500);
+}
+
+.notification-body .notify-desc {
+  font-size: calc(var(--text-scale, 1) * 12px);
+  color: var(--gray-600);
+  margin-top: 4px;
+}
+
+.notification-actions {
+  flex-shrink: 0;
+}
+
+.notify-empty-state {
+  text-align: center;
+  padding: 60px 20px;
+  color: var(--gray-500);
+}
+
+.notify-empty-state .empty-icon {
+  font-size: 48px;
+  margin-bottom: 16px;
+}
+
+.notify-empty-state p {
+  font-size: calc(var(--text-scale, 1) * 16px);
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.notify-empty-state .sub {
+  font-size: calc(var(--text-scale, 1) * 13px);
+  color: var(--gray-400);
+}
+
+/* --- Dashboard Alerts Stat Cards --- */
+.status-card.absent-stat {
+  border-top: 3px solid #ef4444;
+}
+
+.status-card.late-stat {
+  border-top: 3px solid #f59e0b;
+}
+
+/* --- Dark Mode Overrides --- */
+body.dark-mode .notification-card {
+  background: rgba(30, 34, 53, 0.8);
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
+body.dark-mode .notification-card.type-absent {
+  border-left-color: #f87171;
+}
+
+body.dark-mode .notification-card.type-late {
+  border-left-color: #fbbf24;
+}
+
+body.dark-mode .card-alert-badge.absent {
+  background: rgba(248, 113, 113, 0.15);
+  color: #f87171;
+  border-color: rgba(248, 113, 113, 0.3);
+}
+
+body.dark-mode .card-alert-badge.late {
+  background: rgba(251, 191, 36, 0.15);
+  color: #fbbf24;
+  border-color: rgba(251, 191, 36, 0.3);
+}
+
+body.dark-mode .employee-card.alert-absent {
+  border-color: #f87171 !important;
+  box-shadow: 0 0 0 3px rgba(248, 113, 113, 0.1), var(--shadow-md) !important;
+}
+
+body.dark-mode .employee-card.alert-late {
+  border-color: #fbbf24 !important;
+  box-shadow: 0 0 0 3px rgba(251, 191, 36, 0.1), var(--shadow-md) !important;
+}
+
+body.dark-mode .card-ack-btn {
+  border-color: rgba(255, 255, 255, 0.1);
+  color: var(--gray-500);
+}
+
+body.dark-mode .card-ack-btn:hover {
+  background: rgba(255, 255, 255, 0.05);
+}
