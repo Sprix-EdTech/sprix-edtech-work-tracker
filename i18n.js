@@ -166,9 +166,9 @@ const TRANSLATIONS = {
 
     // ---- Sidebar ----
     'sidebar.subtitle': {
-        ja: 'ワークトラッカー   Ver 1.0',
-        en: 'WORK TRACKER   Ver 1.0',
-        ar: 'متتبع العمل   Ver 1.0',
+        ja: 'ワークトラッカー   Ver 1.5',
+        en: 'WORK TRACKER   Ver 1.5',
+        ar: 'متتبع العمل   Ver 1.5',
     },
     'ramadan.label': {
         ja: 'ラマダン',
