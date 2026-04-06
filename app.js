@@ -511,6 +511,7 @@ function deleteRequest(reqId) {
   state.requests = state.requests.filter(r => r.id !== reqId);
   saveState();
   updateRequestBadge();
+  updateGlobalStats();
   if (state.currentView === 'requests') renderRequests();
   render();
 }
@@ -1041,6 +1042,55 @@ function initModal() {
     });
   }
 }
+
+// ---- Tutorial System ----
+let currentTutorialSlide = 1;
+const totalTutorialSlides = 5;
+
+function openTutorial() {
+  document.getElementById('tutorialModalOverlay').classList.add('active');
+  currentTutorialSlide = 1;
+  renderTutorialSlide();
+}
+
+function closeTutorial() {
+  document.getElementById('tutorialModalOverlay').classList.remove('active');
+}
+
+function changeTutorialSlide(direction) {
+  currentTutorialSlide += direction;
+  if (currentTutorialSlide < 1) currentTutorialSlide = 1;
+  if (currentTutorialSlide > totalTutorialSlides) {
+    closeTutorial();
+    return;
+  }
+  renderTutorialSlide();
+}
+
+function renderTutorialSlide() {
+  document.getElementById('tutorialTitle').textContent = t(`tut.${currentTutorialSlide}.title`);
+  document.getElementById('tutorialContent').textContent = t(`tut.${currentTutorialSlide}.desc`);
+
+  const icons = [
+    'ph-star', // 1
+    'ph-squares-four', // 2
+    'ph-note-pencil', // 3
+    'ph-calendar-check', // 4
+    'ph-sliders-horizontal' // 5
+  ];
+  const iconEl = document.getElementById('tutorialIcon');
+  if (iconEl) iconEl.className = `ph-fill ${icons[currentTutorialSlide - 1]}`;
+
+  document.getElementById('btnTutorialPrev').style.visibility = currentTutorialSlide === 1 ? 'hidden' : 'visible';
+  document.getElementById('btnTutorialPrev').textContent = t('tut.btn.prev');
+  document.getElementById('btnTutorialNext').textContent = currentTutorialSlide === totalTutorialSlides ? t('tut.btn.finish') : t('tut.btn.next');
+
+  const indicatorsHTML = Array.from({ length: totalTutorialSlides }).map((_, i) => 
+    `<div class="tutorial-dot ${i + 1 === currentTutorialSlide ? 'active' : ''}"></div>`
+  ).join('');
+  document.getElementById('tutorialIndicators').innerHTML = indicatorsHTML;
+}
+
 
 function openModal(employee = null) {
   state.editingEmployee = employee;

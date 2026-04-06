@@ -16,7 +16,7 @@
     href="https://fonts.googleapis.com/css2?family=Almarai:wght@400;700;800&family=Cairo+Play:wght@400;700&family=Cairo:wght@400;500;600;700&family=Tajawal:wght@400;500;700;800&family=Montserrat:wght@700;800;900&display=swap"
     rel="stylesheet">
 
-  <link rel="stylesheet" href="style.css?v=83">
+  <link rel="stylesheet" href="style.css?v=84">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="https://unpkg.com/@phosphor-icons/web"></script>
 
@@ -511,6 +511,15 @@
                 </select>
               </div>
             </div>
+            <div class="export-card">
+              <h3><i class="ph-fill ph-book-open-text" style="color: var(--sprix-green);"></i> <span
+                  data-i18n="settings.tutorial">Help & Support</span>
+              </h3>
+              <p data-i18n="settings.tutorialDesc" style="color: var(--gray-500); font-size: 14px; margin-bottom: 12px; margin-top: 4px;">Learn how to use all features of the Work Tracker.</p>
+              <button class="btn btn-primary" style="width: 100%; border-radius: 12px;" onclick="openTutorial()">
+                <i class="ph-fill ph-play-circle" style="margin-right: 6px;"></i> <span data-i18n="settings.startTutorial">Start Interactive Tutorial</span>
+              </button>
+            </div>
           </div>
         </div>
 
@@ -519,11 +528,35 @@
 
 
 
+  <!-- Tutorial Modal -->
+  <div class="modal-overlay" id="tutorialModalOverlay" onclick="if(event.target === this) closeTutorial()">
+    <div class="tutorial-modal">
+      <div class="tutorial-header">
+        <h3 id="tutorialTitle">Tutorial</h3>
+        <button class="close-btn" onclick="closeTutorial()">×</button>
+      </div>
+      <div class="tutorial-body">
+        <div class="tutorial-icon-wrapper">
+          <i id="tutorialIcon" class="ph-fill ph-star"></i>
+        </div>
+        <p id="tutorialContent" class="tutorial-text"></p>
+        
+        <div class="tutorial-indicators" id="tutorialIndicators">
+          <!-- Dots generated via JS -->
+        </div>
+      </div>
+      <div class="tutorial-footer">
+        <button class="btn btn-outline" id="btnTutorialPrev" onclick="changeTutorialSlide(-1)">Back</button>
+        <button class="btn btn-primary" id="btnTutorialNext" onclick="changeTutorialSlide(1)">Next</button>
+      </div>
+    </div>
+  </div>
+
     </main>
   </div>
 
-  <script src="i18n.js?v=18"></script>
-  <script src="app.js?v=83"></script>
+  <script src="i18n.js?v=19"></script>
+  <script src="app.js?v=84"></script>
 </body>
 
 </html>

@@ -709,6 +709,90 @@ const TRANSLATIONS = {
         en: 'Incorrect password',
         ar: 'كلمة المرور غير صحيحة',
     },
+
+    // ---- Settings / Tutorial ----
+    'settings.tutorial': {
+        ja: 'ヘルプとサポート',
+        en: 'Help & Support',
+        ar: 'المساعدة والدعم',
+    },
+    'settings.tutorialDesc': {
+        ja: '機能の使い方を学ぶチュートリアルを表示します。',
+        en: 'Learn how to use all features of the Work Tracker.',
+        ar: 'تعرف على كيفية استخدام جميع ميزات متتبع العمل.',
+    },
+    'settings.startTutorial': {
+        ja: 'チュートリアルを開始',
+        en: 'Start Interactive Tutorial',
+        ar: 'بدء البرنامج التعليمي التفاعلي',
+    },
+    'tut.btn.prev': {
+        ja: '戻る',
+        en: 'Back',
+        ar: 'السابق',
+    },
+    'tut.btn.next': {
+        ja: '次へ',
+        en: 'Next',
+        ar: 'التالي',
+    },
+    'tut.btn.finish': {
+        ja: '完了',
+        en: 'Finish',
+        ar: 'إنهاء',
+    },
+    
+    // ---- Tutorial Slides ----
+    'tut.1.title': {
+        ja: 'ようこそ！',
+        en: 'Welcome!',
+        ar: 'أهلاً بك!',
+    },
+    'tut.1.desc': {
+        ja: 'SPRIX EdTech 勤務管理システムへようこそ。このシステムを使えば、チームの出勤状況や届出の管理がとてもスムーズに行えます。',
+        en: 'Welcome to the SPRIX EdTech Work Tracker. This system makes it easy to smoothly manage your team\'s attendance and absence requests.',
+        ar: 'مرحباً بك في نظام تتبع العمل SPRIX EdTech. يسهل هذا النظام إدارة حضور فريقك وطلبات الغياب بسلاسة.',
+    },
+    'tut.2.title': {
+        ja: 'ダッシュボードの基本',
+        en: 'Dashboard Basics',
+        ar: 'أساسيات لوحة المعلومات',
+    },
+    'tut.2.desc': {
+        ja: 'スタッフカードの下部にあるボタン（🏢 出社, 🏠 リモート, 🌙 欠勤, 🔥 残業）をクリックするだけで、毎日のステータスを素早く切り替えられます。',
+        en: 'Easily switch daily statuses by clicking the buttons at the bottom of the staff cards (🏢 Office, 🏠 Remote, 🌙 Leave, 🔥 Overtime).',
+        ar: 'قم بتبديل الحالات اليومية بسهولة عن طريق النقر على الأزرار الموجودة أسفل بطاقات الموظفين (🏢 مكتب, 🏠 عن بُعد, 🌙 إجازة, 🔥 وقت إضافي).',
+    },
+    'tut.3.title': {
+        ja: '届出システム（欠勤・遅刻）',
+        en: 'Request System (Absence/Late)',
+        ar: 'نظام الطلبات (غياب / تأخير)',
+    },
+    'tut.3.desc': {
+        ja: 'カードの「📝 届出」ボタンから、欠勤や遅刻の申請ができます。管理者は左メニューの「届出管理」から申請を承認（Approve）または却下（Reject）できます。',
+        en: 'Staff can submit absence or late requests via the "📝 Request" button on their card. Managers can Approve or Reject them from the "Requests" menu on the left.',
+        ar: 'يمكن للموظفين تقديم طلبات غياب أو تأخير عبر زر "📝 الطلب" في بطاقتهم. يمكن للمديرين الموافقة أو الرفض من قائمة "الطلبات" على اليسار.',
+    },
+    'tut.4.title': {
+        ja: 'カレンダー＆統計',
+        en: 'Calendar & Analytics',
+        ar: 'التقويم والتحليلات',
+    },
+    'tut.4.desc': {
+        ja: '「Calendar」ではチーム全体の勤務状況を月単位で俯瞰できます。「Analytics」では各月ごとの出社日数などを一目で確認できます。',
+        en: 'Use "Calendar" to get a monthly overview of the team\'s attendance. Use "Analytics" to check the total days worked in office per month at a glance.',
+        ar: 'استخدم "التقويم" للحصول على نظرة عامة شهرية على حضور الفريق. استخدم "التحليلات" للتحقق من إجمالي أيام العمل في المكتب بنظرة سريعة.',
+    },
+    'tut.5.title': {
+        ja: '強力なカスタマイズ設定',
+        en: 'Powerful Customizations',
+        ar: 'تخصيصات قوية',
+    },
+    'tut.5.desc': {
+        ja: '設定（Settings）から、ダークモードへの切り替えや、ラマダン用の短縮勤務モードへの変更が可能です。Excelへのバックアップ機能も備えています！',
+        en: 'In Settings, you can switch to Dark Mode or enable Ramadan mode for shorter working hours. You can even backup everything to Excel!',
+        ar: 'في الإعدادات، يمكنك التبديل إلى الوضع الداكن أو تنشيط وضع رمضان لساعات عمل أقصر. يمكنك حتى إجراء نسخ احتياطي لكل شيء في Excel!',
+    }
 };
 
 // ---- i18n Engine ----

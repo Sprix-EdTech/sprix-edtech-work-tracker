@@ -3399,3 +3399,108 @@ body.dark-mode .req-action-btn {
 body.dark-mode .req-action-btn.delete {
   color: var(--gray-400);
 }
+
+/* --- Tutorial Modal --- */
+.tutorial-modal {
+  background: var(--bg-card);
+  width: 90%;
+  max-width: 480px;
+  border-radius: 20px;
+  padding: 30px;
+  text-align: center;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+  position: relative;
+  overflow: hidden;
+  animation: slideUp 0.4s ease-out;
+}
+
+.tutorial-modal::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 120px;
+  background: linear-gradient(135deg, var(--sprix-magenta) 0%, #ff8da1 100%);
+  opacity: 0.1;
+  z-index: 0;
+}
+
+.tutorial-header {
+  position: relative;
+  z-index: 1;
+  margin-bottom: 20px;
+}
+
+.tutorial-header h3 {
+  font-size: 24px;
+  margin: 0;
+  color: var(--text-dark);
+}
+
+.tutorial-header .close-btn {
+  position: absolute;
+  top: -10px; right: -10px;
+  background: none; border: none;
+  font-size: 24px; color: var(--gray-400); cursor: pointer;
+}
+
+.tutorial-body {
+  position: relative;
+  z-index: 1;
+}
+
+.tutorial-icon-wrapper {
+  font-size: 64px;
+  color: var(--sprix-magenta);
+  margin-bottom: 20px;
+  animation: floatIcon 3s ease-in-out infinite;
+}
+
+@keyframes floatIcon {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+.tutorial-text {
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--gray-500);
+  margin-bottom: 30px;
+  min-height: 80px;
+}
+
+.tutorial-indicators {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 30px;
+}
+
+.tutorial-dot {
+  width: 8px; height: 8px;
+  border-radius: 4px;
+  background: #e2e8f0;
+  transition: all 0.3s ease;
+}
+
+.tutorial-dot.active {
+  width: 24px;
+  background: var(--sprix-magenta);
+}
+
+.tutorial-footer {
+  display: flex;
+  justify-content: space-between;
+  position: relative;
+  z-index: 1;
+}
+
+body.dark-mode .tutorial-modal {
+  background: rgba(30, 34, 53, 0.95);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+body.dark-mode .tutorial-header h3 { color: #f0f2f5; }
+body.dark-mode .tutorial-text { color: var(--gray-400); }
+body.dark-mode .tutorial-dot { background: rgba(255, 255, 255, 0.1); }
+body.dark-mode .tutorial-dot.active { background: #ff4081; }
