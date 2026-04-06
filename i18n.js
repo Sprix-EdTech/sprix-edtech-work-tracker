@@ -116,6 +116,11 @@ const TRANSLATIONS = {
         en: '✓ Approve',
         ar: '✓ موافقة',
     },
+    'req.delete': {
+        ja: '🗑 削除',
+        en: '🗑 Delete',
+        ar: '🗑 حذف',
+    },
     'req.reject': {
         ja: '✕ 却下',
         en: '✕ Reject',

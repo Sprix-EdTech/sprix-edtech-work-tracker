@@ -562,7 +562,10 @@ function renderRequests() {
         <button class="req-action-btn approve" onclick="reviewRequest('${req.id}', 'approved')">${t('req.approve')}</button>
         <button class="req-action-btn reject" onclick="reviewRequest('${req.id}', 'rejected')">${t('req.reject')}</button>`;
     } else {
-      actionsHtml = `<span class="req-status-badge ${req.status}">${statusLabel}</span>`;
+      actionsHtml = `
+        <span class="req-status-badge ${req.status}">${statusLabel}</span>
+        <button class="req-action-btn delete" onclick="deleteRequest('${req.id}')" style="margin-top: 8px;">${t('req.delete')}</button>
+      `;
     }
 
     return `

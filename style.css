@@ -3272,6 +3272,18 @@ body.dark-mode .ramadan-info .ramadan-day-label {
   background: rgba(239, 68, 68, 0.1);
 }
 
+.req-action-btn.delete {
+  color: var(--gray-500);
+  border-color: rgba(0, 0, 0, 0.1);
+  padding: 4px 10px;
+}
+
+.req-action-btn.delete:hover {
+  background: rgba(239, 68, 68, 0.1);
+  color: #ef4444;
+  border-color: rgba(239, 68, 68, 0.3);
+}
+
 /* --- Card Request Button --- */
 .card-request-btn {
   display: inline-flex;
@@ -3382,4 +3394,8 @@ body.dark-mode .card-request-btn:hover {
 
 body.dark-mode .req-action-btn {
   border-color: rgba(255, 255, 255, 0.1);
+}
+
+body.dark-mode .req-action-btn.delete {
+  color: var(--gray-400);
 }
