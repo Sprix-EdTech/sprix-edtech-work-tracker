@@ -16,7 +16,7 @@
     href="https://fonts.googleapis.com/css2?family=Almarai:wght@400;700;800&family=Cairo+Play:wght@400;700&family=Cairo:wght@400;500;600;700&family=Tajawal:wght@400;500;700;800&family=Montserrat:wght@700;800;900&display=swap"
     rel="stylesheet">
 
-  <link rel="stylesheet" href="style.css?v=80">
+  <link rel="stylesheet" href="style.css?v=72">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="https://unpkg.com/@phosphor-icons/web"></script>
 
@@ -148,11 +148,6 @@
         <button class="nav-item" data-view="analytics" id="navAnalytics">
           <span class="nav-icon"><i class="ph ph-chart-line-up"></i></span>
           <span data-i18n="nav.analytics">Analytics</span>
-        </button>
-        <button class="nav-item" data-view="notifications" id="navNotifications">
-          <span class="nav-icon"><i class="ph ph-bell-ringing"></i></span>
-          <span data-i18n="nav.notifications">Notifications</span>
-          <span class="nav-badge" id="navNotifyBadge" style="display: none;">0</span>
         </button>
         <button class="nav-item" data-view="calendar" id="navCalendar">
           <span class="nav-icon"><i class="ph ph-calendar-blank"></i></span>
@@ -299,20 +294,6 @@
               <p data-i18n="analytics.finished">Finished</p>
             </div>
           </div>
-          <div class="status-card absent-stat" onclick="switchView('notifications')">
-            <div class="status-icon"><i class="ph-fill ph-warning-circle" style="color: #ef4444;"></i></div>
-            <div class="status-info">
-              <h3 id="globalAbsent">0</h3>
-              <p data-i18n="status.absent">Absent</p>
-            </div>
-          </div>
-          <div class="status-card late-stat" onclick="switchView('notifications')">
-            <div class="status-icon"><i class="ph-fill ph-clock-countdown" style="color: #f59e0b;"></i></div>
-            <div class="status-info">
-              <h3 id="globalLate">0</h3>
-              <p data-i18n="status.late">Late</p>
-            </div>
-          </div>
         </div>
 
         <div class="view active" id="viewDashboard">
@@ -387,16 +368,6 @@
             <div class="legend-item">
               <span class="calendar-dot leave"></span> <span data-i18n="btn.leave">🌙 Leave</span>
             </div>
-          </div>
-        </div>
-
-        <!-- Notifications View -->
-        <div class="view" id="viewNotifications">
-          <div class="section-header">
-            <h2 class="section-title" data-i18n="notify.title">Notifications</h2>
-          </div>
-          <div class="notifications-container" id="notificationsContainer">
-            <!-- Rendered by JS -->
           </div>
         </div>
 
@@ -495,8 +466,8 @@
     </main>
   </div>
 
-  <script src="i18n.js?v=16"></script>
-  <script src="app.js?v=80"></script>
+  <script src="i18n.js?v=15"></script>
+  <script src="app.js?v=78"></script>
 </body>
 
 </html>

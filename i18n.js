@@ -29,68 +29,6 @@ const TRANSLATIONS = {
         en: 'Analytics',
         ar: 'التحليلات',
     },
-    'nav.notifications': {
-        ja: '通知',
-        en: 'Notifications',
-        ar: 'الإشعارات',
-    },
-
-    // ---- Notifications / Alerts ----
-    'alert.absent': {
-        ja: '欠勤',
-        en: 'Absent',
-        ar: 'غائب',
-    },
-    'alert.late': {
-        ja: '遅刻',
-        en: 'Late',
-        ar: 'متأخر',
-    },
-    'alert.absentDesc': {
-        ja: '本日未出勤（無断欠勤の可能性）',
-        en: 'Not checked in today (possible unexcused absence)',
-        ar: 'لم يسجل حضوره اليوم (غياب غير مبرر محتمل)',
-    },
-    'alert.lateDesc': {
-        ja: 'シフト開始から15分以上経過',
-        en: 'Over 15 min past shift start',
-        ar: 'تأخر أكثر من 15 دقيقة عن بداية الدوام',
-    },
-    'alert.acknowledge': {
-        ja: '✓ 確認済み',
-        en: '✓ Acknowledged',
-        ar: '✓ تم الاطلاع',
-    },
-    'alert.acknowledged': {
-        ja: '確認済み',
-        en: 'Acknowledged',
-        ar: 'تم الاطلاع',
-    },
-    'notify.title': {
-        ja: '通知一覧',
-        en: 'Notifications',
-        ar: 'الإشعارات',
-    },
-    'notify.empty': {
-        ja: '未確認の通知はありません 🎉',
-        en: 'No unacknowledged alerts 🎉',
-        ar: 'لا توجد إشعارات غير مقروءة 🎉',
-    },
-    'notify.allClear': {
-        ja: 'すべて正常です',
-        en: 'All clear — everyone is on track',
-        ar: 'كل شيء على ما يرام',
-    },
-    'status.absent': {
-        ja: '欠勤',
-        en: 'Absent',
-        ar: 'غائب',
-    },
-    'status.late': {
-        ja: '遅刻',
-        en: 'Late',
-        ar: 'متأخر',
-    },
 
     // ---- Header ----
     'header.localMode': {
