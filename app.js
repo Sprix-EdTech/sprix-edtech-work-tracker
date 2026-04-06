@@ -137,6 +137,7 @@ const MONTH_NAMES = {
 let state = {
   employees: [],
   attendance: {}, // { 'YYYY-MM-DD': { empId: { status, shift } } }
+  requests: [],   // [ { id, empId, type, date, reason, notes, status, submittedAt, reviewedAt } ]
   currentView: 'dashboard',
   calendarMonth: new Date().getMonth(),
   calendarYear: new Date().getFullYear(),
@@ -188,7 +189,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Initial stats check
   setTimeout(updateGlobalStats, 100);
-  setInterval(updateGlobalStats, 60000); // Check every minute
+  setInterval(updateGlobalStats, 60000);
+
+  // Initial request badge update
+  setTimeout(updateRequestBadge, 200);
 });
 
 // ---- State Management ----
@@ -199,6 +203,7 @@ function loadState() {
       const parsed = JSON.parse(saved);
       state.employees = parsed.employees || [];
       state.attendance = parsed.attendance || {};
+      state.requests = parsed.requests || [];
       state.workMode = parsed.workMode || 'normal';
       state.theme = parsed.theme || 'light';
       state.textSize = parsed.textSize || 'normal';
@@ -233,6 +238,7 @@ function saveState() {
     localStorage.setItem('sprix-ramadan-tracker', JSON.stringify({
       employees: state.employees,
       attendance: state.attendance,
+      requests: state.requests,
       workMode: state.workMode,
       theme: state.theme,
       textSize: state.textSize,
@@ -339,6 +345,7 @@ function switchView(viewName) {
   if (viewName === 'calendar') renderCalendar();
   if (viewName === 'employees') renderEmployeeTable();
   if (viewName === 'analytics') renderAnalytics();
+  if (viewName === 'requests') renderRequests();
 
   updateGlobalStats();
   render();
@@ -402,11 +409,187 @@ function updateRamadanDay() {
     dateEl.textContent = t('ramadan.completed');
   }
 }
+// ---- Request Submission System ----
+
+function openRequestModal(empId) {
+  const emp = state.employees.find(e => e.id === empId);
+  if (!emp) return;
+
+  document.getElementById('reqEmpId').value = empId;
+  document.getElementById('reqEmpName').textContent = emp.name + (emp.department ? ` — ${emp.department}` : '');
+  document.getElementById('reqType').value = 'absent';
+  document.getElementById('reqDate').value = getCurrentEgyptDateKey();
+  document.getElementById('reqReason').value = '';
+  document.getElementById('reqNotes').value = '';
+
+  document.getElementById('requestModalOverlay').classList.add('active');
+}
+
+function closeRequestModal() {
+  document.getElementById('requestModalOverlay').classList.remove('active');
+}
+
+function submitRequest() {
+  const empId = document.getElementById('reqEmpId').value;
+  const type = document.getElementById('reqType').value;
+  const date = document.getElementById('reqDate').value;
+  const reason = document.getElementById('reqReason').value.trim();
+  const notes = document.getElementById('reqNotes').value.trim();
+
+  if (!empId || !date || !reason) {
+    showToast(currentLang === 'ja' ? '理由を入力してください' : currentLang === 'ar' ? 'الرجاء إدخال السبب' : 'Please enter a reason', 'error');
+    return;
+  }
+
+  const request = {
+    id: 'req_' + Date.now(),
+    empId,
+    type,
+    date,
+    reason,
+    notes,
+    status: 'pending',
+    submittedAt: new Date().toISOString(),
+    reviewedAt: null,
+  };
+
+  state.requests.unshift(request); // newest first
+  saveState();
+  closeRequestModal();
+  updateRequestBadge();
+  render();
+
+  showToast(
+    currentLang === 'ja' ? '届出を提出しました' : currentLang === 'ar' ? 'تم تقديم الطلب' : 'Request submitted successfully',
+    'success'
+  );
+}
+
+function reviewRequest(reqId, decision) {
+  const req = state.requests.find(r => r.id === reqId);
+  if (!req) return;
+
+  req.status = decision; // 'approved' or 'rejected'
+  req.reviewedAt = new Date().toISOString();
+
+  // If approved absence, auto-set leave status for that employee on that date
+  if (decision === 'approved' && req.type === 'absent') {
+    if (!state.attendance[req.date]) state.attendance[req.date] = {};
+    state.attendance[req.date][req.empId] = {
+      status: 'leave',
+      shift: getDefaultShift(state.employees.find(e => e.id === req.empId) || {}),
+    };
+  }
+
+  saveState();
+  updateRequestBadge();
+  render();
+  if (state.currentView === 'requests') renderRequests();
+
+  const msg = decision === 'approved'
+    ? (currentLang === 'ja' ? '承認しました' : currentLang === 'ar' ? 'تمت الموافقة' : 'Approved')
+    : (currentLang === 'ja' ? '却下しました' : currentLang === 'ar' ? 'تم الرفض' : 'Rejected');
+  showToast(msg, decision === 'approved' ? 'success' : 'error');
+}
+
+function deleteRequest(reqId) {
+  state.requests = state.requests.filter(r => r.id !== reqId);
+  saveState();
+  updateRequestBadge();
+  if (state.currentView === 'requests') renderRequests();
+  render();
+}
+
+function getEmpPendingRequests(empId) {
+  return state.requests.filter(r => r.empId === empId && r.status === 'pending');
+}
+
+function updateRequestBadge() {
+  const pendingCount = state.requests.filter(r => r.status === 'pending').length;
+  const badge = document.getElementById('navReqBadge');
+  if (badge) {
+    if (pendingCount > 0) {
+      badge.textContent = pendingCount;
+      badge.style.display = 'inline-flex';
+    } else {
+      badge.style.display = 'none';
+    }
+  }
+}
+
+function renderRequests() {
+  const container = document.getElementById('requestsContainer');
+  if (!container) return;
+
+  if (state.requests.length === 0) {
+    container.innerHTML = `
+      <div class="req-empty-state">
+        <div class="empty-icon">📝</div>
+        <p>${t('req.empty')}</p>
+        <div class="sub">${t('req.emptyDesc')}</div>
+      </div>`;
+    return;
+  }
+
+  // Sort: pending first, then by submittedAt descending
+  const sorted = [...state.requests].sort((a, b) => {
+    const aP = a.status === 'pending' ? 0 : 1;
+    const bP = b.status === 'pending' ? 0 : 1;
+    if (aP !== bP) return aP - bP;
+    return new Date(b.submittedAt) - new Date(a.submittedAt);
+  });
+
+  container.innerHTML = sorted.map(req => {
+    const emp = state.employees.find(e => e.id === req.empId);
+    const empName = emp ? emp.name : req.empId;
+    const empDept = emp ? (emp.department || '') : '';
+    const initials = emp ? getInitials(emp.name) : '?';
+
+    const typeLabel = req.type === 'absent' ? t('req.absent')
+      : req.type === 'late' ? t('req.late') : t('req.earlyLeave');
+    const statusLabel = req.status === 'pending' ? t('req.pending')
+      : req.status === 'approved' ? t('req.approved') : t('req.rejected');
+
+    const submittedDate = new Date(req.submittedAt);
+    const timeStr = submittedDate.toLocaleDateString(
+      currentLang === 'ja' ? 'ja-JP' : currentLang === 'ar' ? 'ar-EG' : 'en-US',
+      { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' }
+    );
+
+    let actionsHtml = '';
+    if (req.status === 'pending') {
+      actionsHtml = `
+        <button class="req-action-btn approve" onclick="reviewRequest('${req.id}', 'approved')">${t('req.approve')}</button>
+        <button class="req-action-btn reject" onclick="reviewRequest('${req.id}', 'rejected')">${t('req.reject')}</button>`;
+    } else {
+      actionsHtml = `<span class="req-status-badge ${req.status}">${statusLabel}</span>`;
+    }
+
+    return `
+      <div class="request-card type-${req.type} status-${req.status}">
+        <div class="request-avatar">${initials}</div>
+        <div class="request-body">
+          <div class="req-name">${escapeHTML(empName)}</div>
+          <div class="req-meta">
+            <span class="req-type-badge ${req.type}">${typeLabel}</span>
+            <span style="font-size:12px;color:var(--gray-400);">📅 ${req.date}</span>
+          </div>
+          <div class="req-reason">${escapeHTML(req.reason)}</div>
+          ${req.notes ? `<div class="req-notes">📎 ${escapeHTML(req.notes)}</div>` : ''}
+          <div class="req-time">${t('req.submittedAt')}: ${timeStr}</div>
+        </div>
+        <div class="request-actions">
+          ${actionsHtml}
+        </div>
+      </div>`;
+  }).join('');
+}
 
 // ---- Render ----
 function render() {
   renderStatusCards();
   renderDashboard();
+  updateRequestBadge();
 }
 
 function renderStatusCards() {
@@ -614,7 +797,13 @@ function renderDashboard() {
        `;
       }
     }
-
+    const pendingRequests = getEmpPendingRequests(emp.id);
+    let pendingIndicatorHtml = '';
+    if (pendingRequests.length > 0) {
+      pendingIndicatorHtml = pendingRequests.map(r => `
+        <span class="card-req-indicator">📝 ${r.type === 'absent' ? t('req.absent') : r.type === 'late' ? t('req.late') : t('req.earlyLeave')}</span>
+      `).join('');
+    }
 
     return `
       <div class="employee-card ${displayStatus}" data-emp-id="${emp.id}">
@@ -639,7 +828,10 @@ function renderDashboard() {
           ${emp.remoteDay !== undefined && emp.remoteDay !== ''
         ? `<div class="detail-tag"><span class="tag-icon">🏠</span><span>${getDayNameShort(parseInt(emp.remoteDay))}</span></div>`
         : ''}
+          ${pendingIndicatorHtml}
         </div>
+
+        <button class="card-request-btn" onclick="openRequestModal('${emp.id}')">📝 <span data-i18n="req.btnLabel">${t('req.btnLabel')}</span></button>
 
         <div class="status-selector">
           <button class="status-btn office-btn ${status === 'office' ? 'active' : ''}"

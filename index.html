@@ -16,7 +16,7 @@
     href="https://fonts.googleapis.com/css2?family=Almarai:wght@400;700;800&family=Cairo+Play:wght@400;700&family=Cairo:wght@400;500;600;700&family=Tajawal:wght@400;500;700;800&family=Montserrat:wght@700;800;900&display=swap"
     rel="stylesheet">
 
-  <link rel="stylesheet" href="style.css?v=72">
+  <link rel="stylesheet" href="style.css?v=81">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="https://unpkg.com/@phosphor-icons/web"></script>
 
@@ -118,6 +118,47 @@
     </div>
   </div>
 
+  <!-- Request Submission Modal -->
+  <div class="request-modal-overlay" id="requestModalOverlay">
+    <div class="request-modal">
+      <div class="modal-header">
+        <h3 data-i18n="req.modalTitle">Submit Request</h3>
+        <button class="modal-close" onclick="closeRequestModal()">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label class="form-label">Staff</label>
+          <div class="req-emp-name" id="reqEmpName">—</div>
+          <input type="hidden" id="reqEmpId">
+        </div>
+        <div class="form-group">
+          <label class="form-label" data-i18n="req.type">Request Type</label>
+          <select class="form-select" id="reqType">
+            <option value="absent" data-i18n="req.absent">Absence</option>
+            <option value="late" data-i18n="req.late">Late Arrival</option>
+            <option value="earlyLeave" data-i18n="req.earlyLeave">Early Leave</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label" data-i18n="req.date">Date</label>
+          <input type="date" class="form-input" id="reqDate">
+        </div>
+        <div class="form-group">
+          <label class="form-label" data-i18n="req.reason">Reason</label>
+          <input type="text" class="form-input" id="reqReason" data-i18n-placeholder="req.reasonPlaceholder" placeholder="e.g. Feeling unwell, Personal matter">
+        </div>
+        <div class="form-group">
+          <label class="form-label" data-i18n="req.notes">Notes</label>
+          <textarea id="reqNotes" data-i18n-placeholder="req.notesPlaceholder" placeholder="Any additional details..."></textarea>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-outline" onclick="closeRequestModal()" data-i18n="req.cancel">Cancel</button>
+        <button class="btn btn-primary" onclick="submitRequest()" data-i18n="req.submit">Submit</button>
+      </div>
+    </div>
+  </div>
+
   <!-- App Layout -->
   <div class="app-layout">
 
@@ -148,6 +189,11 @@
         <button class="nav-item" data-view="analytics" id="navAnalytics">
           <span class="nav-icon"><i class="ph ph-chart-line-up"></i></span>
           <span data-i18n="nav.analytics">Analytics</span>
+        </button>
+        <button class="nav-item" data-view="requests" id="navRequests">
+          <span class="nav-icon"><i class="ph ph-note-pencil"></i></span>
+          <span data-i18n="nav.requests">Requests</span>
+          <span class="nav-badge" id="navReqBadge" style="display: none;">0</span>
         </button>
         <button class="nav-item" data-view="calendar" id="navCalendar">
           <span class="nav-icon"><i class="ph ph-calendar-blank"></i></span>
@@ -371,6 +417,16 @@
           </div>
         </div>
 
+        <!-- Requests View -->
+        <div class="view" id="viewRequests">
+          <div class="section-header">
+            <h2 class="section-title" data-i18n="req.listTitle">Request List</h2>
+          </div>
+          <div class="requests-container" id="requestsContainer">
+            <!-- Rendered by JS -->
+          </div>
+        </div>
+
         <!-- Employees View -->
         <div class="view" id="viewEmployees">
           <div class="section-header">
@@ -466,8 +522,8 @@
     </main>
   </div>
 
-  <script src="i18n.js?v=15"></script>
-  <script src="app.js?v=78"></script>
+  <script src="i18n.js?v=17"></script>
+  <script src="app.js?v=81"></script>
 </body>
 
 </html>

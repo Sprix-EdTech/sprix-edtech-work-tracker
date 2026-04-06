@@ -29,6 +29,123 @@ const TRANSLATIONS = {
         en: 'Analytics',
         ar: 'التحليلات',
     },
+    'nav.requests': {
+        ja: '届出管理',
+        en: 'Requests',
+        ar: 'طلبات الإجازة',
+    },
+
+    // ---- Request System ----
+    'req.modalTitle': {
+        ja: '届出を提出',
+        en: 'Submit Request',
+        ar: 'تقديم طلب',
+    },
+    'req.type': {
+        ja: '届出種別',
+        en: 'Request Type',
+        ar: 'نوع الطلب',
+    },
+    'req.absent': {
+        ja: '欠勤届',
+        en: 'Absence',
+        ar: 'غياب',
+    },
+    'req.late': {
+        ja: '遅刻届',
+        en: 'Late Arrival',
+        ar: 'تأخر',
+    },
+    'req.earlyLeave': {
+        ja: '早退届',
+        en: 'Early Leave',
+        ar: 'مغادرة مبكرة',
+    },
+    'req.date': {
+        ja: '対象日',
+        en: 'Date',
+        ar: 'التاريخ',
+    },
+    'req.reason': {
+        ja: '理由',
+        en: 'Reason',
+        ar: 'السبب',
+    },
+    'req.reasonPlaceholder': {
+        ja: '例: 体調不良、私用、家庭の事情',
+        en: 'e.g. Feeling unwell, Personal matter, Family emergency',
+        ar: 'مثال: مرض، أمور شخصية، طوارئ عائلية',
+    },
+    'req.notes': {
+        ja: '備考',
+        en: 'Notes',
+        ar: 'ملاحظات',
+    },
+    'req.notesPlaceholder': {
+        ja: '補足事項があれば記入してください',
+        en: 'Any additional details...',
+        ar: 'أي تفاصيل إضافية...',
+    },
+    'req.submit': {
+        ja: '提出する',
+        en: 'Submit',
+        ar: 'تقديم',
+    },
+    'req.cancel': {
+        ja: 'キャンセル',
+        en: 'Cancel',
+        ar: 'إلغاء',
+    },
+    'req.pending': {
+        ja: '未確認',
+        en: 'Pending',
+        ar: 'قيد الانتظار',
+    },
+    'req.approved': {
+        ja: '承認済み',
+        en: 'Approved',
+        ar: 'تمت الموافقة',
+    },
+    'req.rejected': {
+        ja: '却下',
+        en: 'Rejected',
+        ar: 'مرفوض',
+    },
+    'req.approve': {
+        ja: '✓ 承認',
+        en: '✓ Approve',
+        ar: '✓ موافقة',
+    },
+    'req.reject': {
+        ja: '✕ 却下',
+        en: '✕ Reject',
+        ar: '✕ رفض',
+    },
+    'req.listTitle': {
+        ja: '届出一覧',
+        en: 'Request List',
+        ar: 'قائمة الطلبات',
+    },
+    'req.empty': {
+        ja: '届出はありません',
+        en: 'No requests submitted',
+        ar: 'لا توجد طلبات',
+    },
+    'req.emptyDesc': {
+        ja: 'スタッフカードの📝ボタンから届出を提出できます',
+        en: 'Staff can submit requests via the 📝 button on their card',
+        ar: 'يمكن للموظفين تقديم الطلبات عبر زر 📝 في بطاقتهم',
+    },
+    'req.btnLabel': {
+        ja: '届出',
+        en: 'Request',
+        ar: 'طلب',
+    },
+    'req.submittedAt': {
+        ja: '提出日時',
+        en: 'Submitted',
+        ar: 'تاريخ التقديم',
+    },
 
     // ---- Header ----
     'header.localMode': {
