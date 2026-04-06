@@ -493,6 +493,21 @@ function reviewRequest(reqId, decision) {
 }
 
 function deleteRequest(reqId) {
+  const req = state.requests.find(r => r.id === reqId);
+  
+  // Undo leave status if it was an approved absence
+  if (req && req.status === 'approved' && req.type === 'absent') {
+    if (state.attendance[req.date] && state.attendance[req.date][req.empId] && state.attendance[req.date][req.empId].status === 'leave') {
+      // Remove the exact attendance record that was set to leave
+      delete state.attendance[req.date][req.empId];
+      
+      // Clean up the date key if it's now empty
+      if (Object.keys(state.attendance[req.date]).length === 0) {
+        delete state.attendance[req.date];
+      }
+    }
+  }
+
   state.requests = state.requests.filter(r => r.id !== reqId);
   saveState();
   updateRequestBadge();
