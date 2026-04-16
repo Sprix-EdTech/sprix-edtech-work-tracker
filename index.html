@@ -16,7 +16,7 @@
     href="https://fonts.googleapis.com/css2?family=Almarai:wght@400;700;800&family=Cairo+Play:wght@400;700&family=Cairo:wght@400;500;600;700&family=Tajawal:wght@400;500;700;800&family=Montserrat:wght@700;800;900&display=swap"
     rel="stylesheet">
 
-  <link rel="stylesheet" href="style.css?v=85">
+  <link rel="stylesheet" href="style.css?v=86">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="https://unpkg.com/@phosphor-icons/web"></script>
 
@@ -292,17 +292,9 @@
           <button class="font-size-toggle" onclick="toggleTextSize()" title="Increase Text Size"
             id="btnTextSize">Aa</button>
           
-          <div class="theme-switcher-group" id="themeSwitcher">
-            <button class="theme-btn light-btn active" data-theme="light" onclick="setAppTheme('light')" title="Light Mode">
-              <i class="ph-fill ph-sun"></i>
-            </button>
-            <button class="theme-btn warm-btn" data-theme="warm" onclick="setAppTheme('warm')" title="Warm Mode">
-              <i class="ph-fill ph-cloud-sun"></i>
-            </button>
-            <button class="theme-btn dark-btn" data-theme="dark" onclick="setAppTheme('dark')" title="Dark Mode">
-              <i class="ph-fill ph-moon"></i>
-            </button>
-          </div>
+          <button class="theme-cycle-btn" id="themeCycleBtn" onclick="cycleTheme()" title="Switch Theme">
+            <i class="ph-fill ph-sun" id="themeCycleIcon"></i>
+          </button>
           <!-- Connection Status hidden as per user request -->
           <div class="connection-status hidden" id="connectionStatus" onclick="switchView('settings')"
             style="display: none;">
@@ -558,8 +550,8 @@
     </main>
   </div>
 
-  <script src="i18n.js?v=20"></script>
-  <script src="app.js?v=85"></script>
+  <script src="i18n.js?v=21"></script>
+  <script src="app.js?v=86"></script>
 </body>
 
 </html>

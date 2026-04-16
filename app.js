@@ -1824,13 +1824,22 @@ function setAppTheme(themeName) {
     document.body.classList.add('warm-mode');
   }
 
-  // Update header buttons active state
-  document.querySelectorAll('.theme-btn').forEach(btn => {
-    btn.classList.toggle('active', btn.dataset.theme === themeName);
-  });
+  // Update the single cycle button icon
+  const iconEl = document.getElementById('themeCycleIcon');
+  if (iconEl) {
+    const iconMap = { light: 'ph-sun', warm: 'ph-cloud-sun', dark: 'ph-moon' };
+    iconEl.className = `ph-fill ${iconMap[themeName] || 'ph-sun'}`;
+  }
 
   // Re-render charts to fit the theme if analytics view is open
   if (state.currentView === 'analytics') renderAnalytics();
+}
+
+function cycleTheme() {
+  const order = ['light', 'warm', 'dark'];
+  const currentIndex = order.indexOf(state.theme || 'light');
+  const nextIndex = (currentIndex + 1) % order.length;
+  setAppTheme(order[nextIndex]);
 }
 
 function toggleTextSize() {
