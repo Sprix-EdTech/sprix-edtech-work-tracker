@@ -3504,3 +3504,173 @@ body.dark-mode .tutorial-header h3 { color: #f0f2f5; }
 body.dark-mode .tutorial-text { color: var(--gray-400); }
 body.dark-mode .tutorial-dot { background: rgba(255, 255, 255, 0.1); }
 body.dark-mode .tutorial-dot.active { background: #ff4081; }
+
+/* =========================================
+   THEME SWITCHER
+   ========================================= */
+.theme-switcher-group {
+  display: flex;
+  align-items: center;
+  background: var(--bg-card);
+  border-radius: 20px;
+  padding: 4px;
+  gap: 4px;
+  box-shadow: inset 0 2px 5px rgba(0,0,0,0.05); border: 1px solid rgba(0,0,0,0.05); }
+
+body.dark-mode .theme-switcher-group {
+  background: rgba(0,0,0,0.2);
+  border-color: rgba(255,255,255,0.05);
+  box-shadow: inset 0 2px 5px rgba(0,0,0,0.2);
+}
+
+.theme-btn {
+  background: transparent;
+  border: none;
+  width: 32px;
+  height: 32px;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: var(--gray-400);
+  transition: all 0.3s ease;
+}
+
+.theme-btn:hover {
+  color: var(--gray-500);
+  background: rgba(0,0,0,0.05);
+}
+
+body.dark-mode .theme-btn:hover {
+  color: #fff;
+  background: rgba(255,255,255,0.1);
+}
+
+.theme-btn.active {
+  background: #fff;
+  color: var(--sprix-magenta);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.theme-btn.warm-btn.active {
+  color: #db7a4d;
+}
+
+body.dark-mode .theme-btn.active {
+  background: var(--bg-hover);
+  color: #fff;
+}
+
+/* =========================================
+   WARM MODE OVERRIDES
+   ========================================= */
+body.warm-mode {
+  --sprix-magenta: #e07a5f;
+  --sprix-magenta-light: #e99a84;
+  --bg-card: rgba(255, 252, 248, 0.9);
+  --gray-50: #fdf8f4;
+  --gray-100: #f7efe5;
+  --gray-200: #e8dbcc;
+  --gray-300: #d4c4b0;
+  --gray-400: #b39e8a;
+  --gray-500: #8c7668;
+  --gray-600: #6b5545;
+  --gray-700: #4a3728;
+  --gray-800: #3a251c;
+  --gray-900: #2a1a10;
+  --white: #fffcf8;
+
+  --status-office: #3d5a80;
+  --status-remote: #e07a5f;
+  --status-office-bg: rgba(61, 90, 128, 0.08);
+  --status-remote-bg: rgba(224, 122, 95, 0.08);
+
+  background-color: #fdf8f4;
+  background-image:
+    radial-gradient(circle at 15% 50%, rgba(224, 122, 95, 0.08), transparent 50%),
+    radial-gradient(circle at 85% 30%, rgba(199, 143, 107, 0.06), transparent 50%);
+}
+
+body.warm-mode .sidebar {
+  background: linear-gradient(180deg, #fffcf9 0%, #f9efe7 100%);
+  border-right-color: #eee1d4;
+}
+
+body.warm-mode .header {
+  background: rgba(255, 252, 248, 0.75);
+  border-bottom-color: #f0e4d8;
+}
+
+body.warm-mode .glass-panel {
+  background: var(--bg-card);
+  border-color: rgba(228, 210, 190, 0.4);
+  box-shadow: 0 8px 32px rgba(119, 78, 62, 0.05);
+}
+
+body.warm-mode .employee-card {
+  background: rgba(255, 255, 255, 0.7);
+  border-color: #fbedde;
+}
+
+body.warm-mode .employee-card:hover {
+  box-shadow: 0 8px 24px rgba(199, 143, 107, 0.12);
+}
+
+body.warm-mode .theme-switcher-group {
+  background: rgba(230, 214, 198, 0.4);
+}
+
+body.warm-mode .theme-btn.active {
+  background: #fff;
+  box-shadow: 0 2px 8px rgba(199, 143, 107, 0.2);
+}
+
+body.warm-mode .nav-item.active {
+  background: rgba(224, 122, 95, 0.1);
+  color: #e07a5f;
+}
+
+body.warm-mode .btn-outline {
+  border-color: var(--sprix-magenta);
+  color: var(--gray-700);
+}
+body.warm-mode .btn-outline:hover {
+  background: var(--sprix-magenta);
+  color: #fff;
+}
+
+body.warm-mode .export-card {
+  background: rgba(255, 252, 248, 0.85);
+  border-color: #fbedde;
+}
+
+body.warm-mode .modal {
+  background: #fffcf9;
+}
+
+body.warm-mode .auth-card {
+  background: rgba(255, 252, 248, 0.95);
+}
+
+body.warm-mode .tutorial-modal {
+  background: #fffcf9;
+}
+
+body.warm-mode .tutorial-modal::before {
+  background: linear-gradient(135deg, #e07a5f 0%, #f0b49a 100%);
+}
+
+body.warm-mode .tutorial-icon-wrapper {
+  color: #e07a5f;
+}
+
+body.warm-mode .tutorial-dot.active {
+  background: #e07a5f;
+}
+
+/* Warm mode pre-paint flash prevention */
+html.warm-pre,
+html.warm-pre body {
+  background-color: #fdf8f4 !important;
+}

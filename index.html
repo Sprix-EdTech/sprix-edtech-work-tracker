@@ -16,7 +16,7 @@
     href="https://fonts.googleapis.com/css2?family=Almarai:wght@400;700;800&family=Cairo+Play:wght@400;700&family=Cairo:wght@400;500;600;700&family=Tajawal:wght@400;500;700;800&family=Montserrat:wght@700;800;900&display=swap"
     rel="stylesheet">
 
-  <link rel="stylesheet" href="style.css?v=84">
+  <link rel="stylesheet" href="style.css?v=85">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="https://unpkg.com/@phosphor-icons/web"></script>
 
@@ -29,6 +29,8 @@
           var parsed = JSON.parse(saved);
           if (parsed.theme === 'dark') {
             document.documentElement.classList.add('dark-pre');
+          } else if (parsed.theme === 'warm') {
+            document.documentElement.classList.add('warm-pre');
           }
         }
       } catch (e) { }
@@ -289,6 +291,18 @@
           </div>
           <button class="font-size-toggle" onclick="toggleTextSize()" title="Increase Text Size"
             id="btnTextSize">Aa</button>
+          
+          <div class="theme-switcher-group" id="themeSwitcher">
+            <button class="theme-btn light-btn active" data-theme="light" onclick="setAppTheme('light')" title="Light Mode">
+              <i class="ph-fill ph-sun"></i>
+            </button>
+            <button class="theme-btn warm-btn" data-theme="warm" onclick="setAppTheme('warm')" title="Warm Mode">
+              <i class="ph-fill ph-cloud-sun"></i>
+            </button>
+            <button class="theme-btn dark-btn" data-theme="dark" onclick="setAppTheme('dark')" title="Dark Mode">
+              <i class="ph-fill ph-moon"></i>
+            </button>
+          </div>
           <!-- Connection Status hidden as per user request -->
           <div class="connection-status hidden" id="connectionStatus" onclick="switchView('settings')"
             style="display: none;">
@@ -501,17 +515,6 @@
             </div>
 
             <div class="export-card">
-              <h3><i class="ph-fill ph-palette" style="color: var(--sprix-red);"></i> <span
-                  data-i18n="settings.theme">Theme & Appearance</span>
-              </h3>
-              <div class="form-group" style="margin-top: 12px;">
-                <select class="form-select" id="themeSelect" onchange="changeTheme()">
-                  <option value="light" data-i18n="theme.light">Light Mode</option>
-                  <option value="dark" data-i18n="theme.dark">Dark Mode</option>
-                </select>
-              </div>
-            </div>
-            <div class="export-card">
               <h3><i class="ph-fill ph-book-open-text" style="color: var(--sprix-green);"></i> <span
                   data-i18n="settings.tutorial">Help & Support</span>
               </h3>
@@ -555,8 +558,8 @@
     </main>
   </div>
 
-  <script src="i18n.js?v=19"></script>
-  <script src="app.js?v=84"></script>
+  <script src="i18n.js?v=20"></script>
+  <script src="app.js?v=85"></script>
 </body>
 
 </html>

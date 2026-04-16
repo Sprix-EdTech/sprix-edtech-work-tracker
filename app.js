@@ -167,18 +167,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Apply saved language & theme
   setLanguage(currentLang);
-  document.body.classList.toggle('dark-mode', state.theme === 'dark');
-  // Remove the pre-paint dark class (applied synchronously in <head> to avoid flash)
-  document.documentElement.classList.remove('dark-pre');
+  setAppTheme(state.theme || 'light');
+  document.documentElement.classList.remove('dark-pre', 'warm-pre');
   applyTextSize();
 
   // Update modes
   const modeSelect = document.getElementById('workModeSelect');
   if (modeSelect) modeSelect.value = state.workMode;
   changeWorkMode(); // ensure shift options reflect current mode
-
-  const themeSelect = document.getElementById('themeSelect');
-  if (themeSelect) themeSelect.value = state.theme;
 
   // Start Timezone Clocks
   startClocks();
@@ -1816,13 +1812,22 @@ function changeWorkMode() {
   if (state.currentView === 'employees') renderEmployeeTable();
 }
 
-function changeTheme() {
-  const themeSelect = document.getElementById('themeSelect');
-  if (!themeSelect) return;
-
-  state.theme = themeSelect.value;
+function setAppTheme(themeName) {
+  state.theme = themeName;
   saveState();
-  document.body.classList.toggle('dark-mode', state.theme === 'dark');
+  
+  document.body.classList.remove('dark-mode', 'warm-mode');
+  
+  if (themeName === 'dark') {
+    document.body.classList.add('dark-mode');
+  } else if (themeName === 'warm') {
+    document.body.classList.add('warm-mode');
+  }
+
+  // Update header buttons active state
+  document.querySelectorAll('.theme-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.theme === themeName);
+  });
 
   // Re-render charts to fit the theme if analytics view is open
   if (state.currentView === 'analytics') renderAnalytics();
