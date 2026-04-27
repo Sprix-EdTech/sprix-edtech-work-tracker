@@ -824,7 +824,7 @@ function renderDashboard() {
       <div class="employee-card ${displayStatus}" data-emp-id="${emp.id}">
         <div class="employee-card-header">
           <div class="employee-info">
-            <div class="employee-avatar">${initials}</div>
+            ${getAvatarHtml(emp, 48, 16)}
             <div>
               <div class="employee-name">${escapeHTML(emp.name)}</div>
               <div class="employee-dept">${escapeHTML(emp.department || '')}</div>
@@ -1124,6 +1124,25 @@ function openModal(employee = null) {
     remoteDaySelect.value = '';
   }
 
+  // Reset photo state
+  let currentEditPhoto = employee ? (employee.photo || '') : '';
+  const preview = document.getElementById('photoPreview');
+  const previewImg = document.getElementById('photoPreviewImg');
+  const previewInitials = document.getElementById('photoPreviewInitials');
+
+  if (currentEditPhoto) {
+    previewImg.src = currentEditPhoto;
+    previewImg.style.display = 'block';
+    previewInitials.style.display = 'none';
+  } else {
+    previewImg.src = '';
+    previewImg.style.display = 'none';
+    previewInitials.style.display = '';
+    previewInitials.textContent = employee ? getInitials(employee.name) : '?';
+  }
+  // Store photo reference in a hidden attr
+  preview.dataset.photo = currentEditPhoto;
+
   document.getElementById('modalOverlay').classList.add('active');
   setTimeout(() => nameInput.focus(), 200);
 }
@@ -1137,6 +1156,43 @@ function closeModal() {
     overlay.classList.remove('active', 'closing');
     state.editingEmployee = null;
   }, 350);
+}
+
+function handlePhotoUpload(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+
+  // Resize to max 200x200 and compress to keep localStorage size manageable
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    const img = new Image();
+    img.onload = function() {
+      const maxSize = 200;
+      let w = img.width, h = img.height;
+      if (w > maxSize || h > maxSize) {
+        if (w > h) { h = Math.round(h * maxSize / w); w = maxSize; }
+        else { w = Math.round(w * maxSize / h); h = maxSize; }
+      }
+      const canvas = document.createElement('canvas');
+      canvas.width = w; canvas.height = h;
+      canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+      const dataUrl = canvas.toDataURL('image/jpeg', 0.82);
+
+      // Update preview
+      const previewImg = document.getElementById('photoPreviewImg');
+      const previewInitials = document.getElementById('photoPreviewInitials');
+      previewImg.src = dataUrl;
+      previewImg.style.display = 'block';
+      previewInitials.style.display = 'none';
+
+      // Store in dataset for save
+      document.getElementById('photoPreview').dataset.photo = dataUrl;
+    };
+    img.src = e.target.result;
+  };
+  reader.readAsDataURL(file);
+  // Reset input so the same file can be re-selected
+  event.target.value = '';
 }
 
 function saveEmployee() {
@@ -1163,6 +1219,8 @@ function saveEmployee() {
       emp.department = department;
       emp.defaultShift = defaultShift;
       emp.remoteDay = remoteDay;
+      const photoData = document.getElementById('photoPreview').dataset.photo;
+      if (photoData !== undefined) emp.photo = photoData;
     }
     showToast(`${name} ${t('toast.updated')}`, 'success');
   } else {
@@ -1173,6 +1231,7 @@ function saveEmployee() {
       department,
       defaultShift,
       remoteDay,
+      photo: document.getElementById('photoPreview').dataset.photo || '',
     };
     state.employees.push(newEmp);
     showToast(`${name} ${t('toast.added')}`, 'success');
@@ -1212,7 +1271,7 @@ function renderEmployeeTable() {
       <tr>
         <td>
           <div class="table-avatar">
-            <div class="employee-avatar" style="width: 32px; height: 32px; font-size: 11px;">${getInitials(emp.name)}</div>
+            ${getAvatarHtml(emp, 32, 11)}
             <span style="font-weight: 500;">${escapeHTML(emp.name)}</span>
           </div>
         </td>
@@ -1744,6 +1803,15 @@ function generateId() {
 
 function getInitials(name) {
   return name.split(/[\s　]+/).map(w => w.charAt(0).toUpperCase()).join('').slice(0, 2);
+}
+
+function getAvatarHtml(emp, size = 48, fontSize = 16) {
+  if (emp.photo) {
+    return `<div class="employee-avatar has-photo" style="width:${size}px;height:${size}px;">
+      <img src="${emp.photo}" alt="${escapeHTML(emp.name)}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">
+    </div>`;
+  }
+  return `<div class="employee-avatar" style="width:${size}px;height:${size}px;font-size:${fontSize}px;">${getInitials(emp.name)}</div>`;
 }
 
 function escapeHTML(str) {

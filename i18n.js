@@ -389,6 +389,11 @@ const TRANSLATIONS = {
         en: 'e.g. 08:30 - 17:30',
         ar: 'مثال: 08:30 - 17:30',
     },
+    'modal.photoHint': {
+        ja: '写真を追加',
+        en: 'Add Photo',
+        ar: 'إضافة صورة',
+    },
     'modal.remoteDay': {
         ja: 'リモートワーク曜日',
         en: 'Remote Work Day',
