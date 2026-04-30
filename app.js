@@ -257,8 +257,19 @@ async function loadDataFromCloud() {
 
     if (data.success) {
       if (data.employees && data.employees.length > 0) {
+        // Preserve locally stored photos (not synced to Sheets)
+        const localPhotos = {};
+        state.employees.forEach(emp => {
+          if (emp.photo) localPhotos[emp.id] = emp.photo;
+        });
+
         state.employees = data.employees;
         state.employees.sort((a, b) => a.name.localeCompare(b.name));
+
+        // Merge photos back
+        state.employees.forEach(emp => {
+          if (localPhotos[emp.id]) emp.photo = localPhotos[emp.id];
+        });
       }
       if (data.attendance) state.attendance = Object.assign(state.attendance, data.attendance);
 
@@ -266,6 +277,7 @@ async function loadDataFromCloud() {
       localStorage.setItem('sprix-ramadan-tracker', JSON.stringify({
         employees: state.employees,
         attendance: state.attendance,
+        requests: state.requests,
         workMode: state.workMode,
         theme: state.theme,
         textSize: state.textSize,
@@ -1751,7 +1763,18 @@ async function loadFromSheets() {
       if (data.success && data.employees) {
         // Merge: if sheets has data, use it; otherwise keep local
         if (data.employees.length > 0) {
+          // Preserve locally stored photos (not synced to Sheets)
+          const localPhotos = {};
+          state.employees.forEach(emp => {
+            if (emp.photo) localPhotos[emp.id] = emp.photo;
+          });
+
           state.employees = data.employees;
+
+          // Merge photos back
+          state.employees.forEach(emp => {
+            if (localPhotos[emp.id]) emp.photo = localPhotos[emp.id];
+          });
         }
         if (data.attendance && Object.keys(data.attendance).length > 0) {
           state.attendance = data.attendance;
